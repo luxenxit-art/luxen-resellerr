@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXEN XIT - Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg-dark: #03060f;
+--card-bg: #080e1a;
+--card-border: rgba(0, 212, 255, 0.3);
+--accent-blue: #0088ff;
+--accent-glow: #00d4ff;
+--text-white: #ffffff;
+--text-muted: #94a3b8;
+--danger-red: #ff1744;
+--success-green: #00e676;
+--neon-glow: 0 0 15px rgba(0, 212, 255, 0.4);
+--neon-green-glow: 0 0 15px rgba(0, 230, 118, 0.4);
+}
+* { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
+body {
+background: radial-gradient(circle at center, #0a1128 0%, var(--bg-dark) 100%);
+color: var(--text-white);
+min-height: 100vh;
+padding: 20px 15px;
+display: flex;
+justify-content: center;
+align-items: flex-start;
+}
+.dashboard-container {
+width: 100%;
+max-width: 500px;
+display: flex;
+flex-direction: column;
+gap: 16px;
+}
+.header-bar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 8px;
+}
+.brand-logo-container {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+margin-bottom: 25px;
+padding: 0 5px;
+}
+.brand-logo {
+font-family: 'Orbitron', sans-serif;
+font-size: 1.6rem;
+font-weight: 900;
+letter-spacing: 1.5px;
+font-style: italic;
+line-height: 1.1;
+color: #fff;
+text-shadow: 0 0 10px rgba(0,212,255,0.5);
+}
+.brand-logo span { display: block; font-size: 0.75rem; color: var(--accent-glow); letter-spacing: 3px; font-style: normal; margin-top: 2px; text-shadow: 0 0 8px var(--accent-glow); }
+.top-pill-btn {
+background: rgba(0, 136, 255, 0.15);
+border: 1px solid var(--accent-glow);
+color: var(--accent-glow);
+padding: 6px 14px;
+border-radius: 20px;
+font-size: 0.7rem;
+font-weight: 700;
+cursor: pointer;
+text-transform: uppercase;
+letter-spacing: 1px;
+display: inline-flex;
+align-items: center;
+gap: 6px;
+box-shadow: var(--neon-glow);
+}
+.nav-btns { display: flex; gap: 8px; }
+.nav-btn {
+background: rgba(11, 17, 31, 0.9);
+border: 1px solid var(--card-border);
+color: var(--text-muted);
+padding: 6px 14px;
+border-radius: 20px;
+font-size: 0.75rem;
+font-weight: 700;
+cursor: pointer;
+text-transform: uppercase;
+letter-spacing: 1px;
+display: flex;
+align-items: center;
+gap: 6px;
+transition: 0.3s;
+}
+.nav-btn.active { color: var(--accent-glow); border-color: var(--accent-glow); box-shadow: var(--neon-glow); }
+.btn-share-vibrant {
+background: linear-gradient(135deg, #00c6ff, #0072ff);
+border: 1px solid #00d4ff;
+color: #fff;
+padding: 8px 14px;
+border-radius: 12px;
+font-size: 0.75rem;
+font-weight: 800;
+cursor: pointer;
+text-transform: uppercase;
+box-shadow: 0 0 15px rgba(0, 114, 255, 0.6);
+display: inline-flex;
+align-items: center;
+gap: 5px;
+transition: 0.3s;
+}
+.btn-share-vibrant:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(0, 212, 255, 0.8); }
+.stats-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+}
+.stat-card {
+background: var(--card-bg);
+border: 1px solid var(--card-border);
+border-radius: 16px;
+padding: 16px;
+text-align: center;
+box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0, 136, 255, 0.1);
+}
+.stat-value {
+font-family: 'Orbitron', sans-serif;
+font-size: 1.6rem;
+font-weight: 800;
+color: #fff;
+margin-bottom: 2px;
+text-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+}
+.stat-label {
+font-size: 0.7rem;
+color: var(--text-muted);
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 1px;
+}
+.accordion-item {
+background: var(--card-bg);
+border: 1px solid var(--card-border);
+border-radius: 16px;
+overflow: hidden;
+margin-bottom: 12px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.accordion-header {
+padding: 16px 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+cursor: pointer;
+font-weight: 700;
+font-size: 0.85rem;
+color: var(--text-muted);
+text-transform: uppercase;
+letter-spacing: 1px;
+user-select: none;
+}
+.accordion-header.active { color: var(--accent-glow); text-shadow: 0 0 8px var(--accent-glow); }
+.accordion-icon { transition: transform 0.3s ease; }
+.accordion-header.active .accordion-icon { transform: rotate(180deg); }
+.accordion-content {
+padding: 0 20px 20px 20px;
+display: none;
+flex-direction: column;
+gap: 12px;
+}
+.accordion-content.show { display: flex; }
+.input-field {
+width: 100%;
+background: #030712;
+border: 1px solid var(--card-border);
+border-radius: 12px;
+padding: 14px;
+color: #fff;
+font-family: 'Orbitron', 'Cairo', sans-serif;
+font-size: 0.95rem;
+text-align: center;
+outline: none;
+transition: 0.3s;
+box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+}
+.input-field:focus { border-color: var(--accent-glow); box-shadow: var(--neon-glow), inset 0 0 8px rgba(0, 212, 255, 0.2); }
+.btn-submit {
+width: 100%;
+background: linear-gradient(135deg, #0051ff, #00d4ff);
+border: 1px solid var(--accent-glow);
+border-radius: 12px;
+color: #fff;
+padding: 14px;
+font-weight: 800;
+font-size: 0.9rem;
+text-transform: uppercase;
+letter-spacing: 1.5px;
+cursor: pointer;
+box-shadow: var(--neon-glow);
+transition: 0.3s;
+}
+.btn-submit:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 0 25px rgba(0, 212, 255, 0.7); }
+.table-header-action {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+}
+.btn-delete-selected {
+background: linear-gradient(135deg, #ff0033, #ff4b2b);
+color: #fff;
+border: none;
+padding: 8px 16px;
+border-radius: 10px;
+font-size: 0.75rem;
+font-weight: 800;
+cursor: pointer;
+box-shadow: 0 0 12px rgba(255, 0, 51, 0.5);
+}
+.resellers-table {
+width: 100%;
+border-collapse: collapse;
+font-size: 0.8rem;
+}
+.resellers-table th {
+color: var(--accent-glow);
+padding: 8px 4px;
+text-align: right;
+font-weight: 700;
+border-bottom: 1px solid var(--card-border);
+}
+.resellers-table td {
+padding: 12px 4px;
+border-bottom: 1px solid rgba(255,255,255,0.05);
+vertical-align: middle;
+}
+.code-text { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: #fff; font-weight: 700; text-shadow: 0 0 8px rgba(255,255,255,0.3); }
+.val-green { color: var(--success-green); font-family: 'Orbitron', sans-serif; font-weight: 700; text-shadow: var(--neon-green-glow); }
+.val-num { font-family: 'Orbitron', sans-serif; }
+.btn-trash {
+background: rgba(255, 23, 68, 0.15);
+border: 1px solid rgba(255, 23, 68, 0.4);
+color: var(--danger-red);
+padding: 6px 12px;
+border-radius: 8px;
+cursor: pointer;
+box-shadow: 0 0 10px rgba(255, 23, 68, 0.3);
+transition: 0.3s;
+}
+.btn-trash:hover { background: rgba(255, 23, 68, 0.3); box-shadow: 0 0 15px rgba(255, 23, 68, 0.6); }
+.msg-box { font-size: 0.8rem; text-align: center; min-height: 18px; margin-top: 4px; font-weight: 700; text-shadow: 0 0 10px rgba(0,212,255,0.4); }
+.hidden { display: none !important; }
+.auth-container-center {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+min-height: 85vh;
+text-align: center;
+width: 100%;
+}
+.auth-sub { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; line-height: 1.5; }
+.footer-link-btn {
+background: none; border: none; color: var(--accent-glow); font-size: 0.75rem; cursor: pointer; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;
+text-shadow: 0 0 8px var(--accent-glow);
+}
+.footer-link-btn:hover { opacity: 0.9; }
+.secret-admin-trigger {
+width: 12px;
+height: 12px;
+background: transparent;
+margin: 25px auto 0 auto;
+cursor: pointer;
+border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard-container" id="appRoot">
+<!-- ================= 1. شاشة تسجيل دخول الموزع ================= -->
+<div id="resellerLoginView" class="auth-container-center">
+<div class="brand-logo-container">
+<button class="top-pill-btn" onclick="showAdminLogin()">
+🛡 RESELLER ACCESS
+</button>
+<div class="brand-logo" style="text-align: left;">
+LUXEN XIT
+<span>DASHBOARD</span>
+</div>
+</div>
+
+<div style="width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 16px; margin-top: 20px;">
+<div class="auth-sub">ENTER YOUR RESELLER CODE<br>TO ACCESS THE PANEL</div>
+
+<div style="text-align: right; font-size: 0.65rem; color: var(--accent-glow); font-weight: 700; margin-bottom: -10px;">RESELLER CODE</div>
+<div style="position: relative; display: flex; align-items: center;">
+<input type="text" id="resellerInputCode" class="input-field" placeholder="ENTER RESELLER CODE" style="padding-left: 45px; text-align: center;">
+<span style="position: absolute; left: 16px; color: var(--accent-glow); font-size: 0.9rem;">🔑</span>
+</div>
+
+<button class="btn-submit" onclick="loginAsReseller()">→ UNLOCK</button>
+
+<div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+<span style="font-size: 0.7rem; color: var(--text-muted);">No key? Contact your seller.</span>
+<button class="footer-link-btn" onclick="showAdminLogin()">
+🛡 ADMIN ACCESS
+</button>
+</div>
+</div>
+</div>
+
+<!-- ================= 2. شاشة تسجيل دخول الأدمن ================= -->
+<div id="adminLoginView" class="auth-container-center hidden">
+<div class="brand-logo-container">
+<button class="top-pill-btn" onclick="showResellerLogin()">
+🛡 ADMIN ACCESS
+</button>
+<div class="brand-logo" style="text-align: left;">
+LUXEN XIT
+<span>DASHBOARD</span>
+</div>
+</div>
+
+<div style="width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 16px; margin-top: 20px;">
+<div class="auth-sub">RESTRICTED AREA<br>AUTHORIZED PERSONNEL ONLY</div>
+
+<div style="position: relative; display: flex; align-items: center; margin-top: 10px;">
+<input type="password" id="adminInputPass" class="input-field" placeholder="ENTER ADMIN PASSWORD" style="padding-left: 45px; text-align: center;">
+<span style="position: absolute; left: 16px; color: var(--accent-glow); font-size: 0.9rem;">🔒</span>
+</div>
+
+<button class="btn-submit" onclick="loginAsAdmin()">→ LOGIN</button>
+
+<div style="margin-top: 15px; text-align: center;">
+<button class="footer-link-btn" onclick="showResellerLogin()">
+◄ BACK TO RESELLER LOGIN
+</button>
+</div>
+</div>
+</div>
+
+<!-- ================= 3. لوحة تحكم الموزع ================= -->
+<div id="resellerPanel" class="hidden">
+<div class="header-bar">
+<div class="brand-logo" style="font-size: 1.2rem;">LUXEN XIT<span>DASHBOARD</span></div>
+<div class="nav-btns">
+<button class="nav-btn active">👤 RESELLER</button>
+<button class="nav-btn" onclick="logout()">LOGOUT ➔</button>
+</div>
+</div>
+
+<div class="stat-card" style="margin-bottom: 16px;">
+<div class="auth-sub">YOUR RESELLER CODE</div>
+<div class="stat-value" id="resellerDisplayCode" style="color: var(--accent-glow);">--</div>
+<div class="auth-sub" style="margin-top: 10px;">YOUR BALANCE</div>
+<div class="stat-value" id="resellerDisplayBalance" style="color: var(--success-green); text-shadow: var(--neon-green-glow);">0.00</div>
+<div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Created <span id="resellerKeysCountBadge" style="color: #fff; font-weight:700;">0</span> keys</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header active" onclick="toggleAccordion(this)">
+<span>⚡ GENERATE KEYS</span>
+<span class="accordion-icon">❯</span>
+</div>
+<div class="accordion-content show">
+<select id="keyDurationSelect" class="input-field">
+<option value="3600000">1 Hour - 0.50</option>
+<option value="10800000">3 Hours - 1.00</option>
+<option value="21600000">6 Hours - 1.50</option>
+<option value="43200000">12 Hours - 2.00</option>
+<option value="86400000">24 Hours - 2.50</option>
+<option value="259200000">3 Days - 3.50</option>
+<option value="604800000">7 Days - 4.50</option>
+<option value="1296000000">15 Days - 6.00</option>
+<option value="2592000000" selected>30 Days - 10.00</option>
+</select>
+<div style="display:flex; align-items:center; gap:10px;">
+<input type="number" id="keyQuantityInput" class="input-field" value="1" min="1" max="10" style="max-width:100px;">
+<button class="btn-submit" onclick="generateKeys()">🔥 GENERATE KEYS</button>
+</div>
+</div>
+</div>
+
+<div id="newKeysResultBox" class="hidden" style="background:rgba(0,230,118,0.1); border:1px solid rgba(0,230,118,0.4); border-radius:16px; padding:15px; margin-bottom:12px; box-shadow: var(--neon-green-glow);">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+<span style="font-size:0.75rem; color:var(--success-green); font-weight:900;">NEW KEYS (<span id="newKeysCountNum">1</span>)</span>
+</div>
+<div id="newKeysListContent" style="display:flex; flex-direction:column; gap:8px;"></div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header active" onclick="toggleAccordion(this)">
+<span>🔑 MY KEYS</span>
+<span class="accordion-icon">❯</span>
+</div>
+<div class="accordion-content show" id="resellerKeysList" style="max-height: 240px; overflow-y: auto;">
+<div style="text-align:center; color:var(--text-muted); font-size:0.8rem;">No keys created yet</div>
+</div>
+</div>
+</div>
+
+<!-- ================= 4. لوحة تحكم الأدمن ================= -->
+<div id="adminPanel" class="hidden">
+<div class="header-bar">
+<div class="brand-logo" style="font-size: 1.2rem;">LUXEN XIT<span>DASHBOARD</span></div>
+<div class="nav-btns">
+<button class="nav-btn active">⬡ ADMIN</button>
+<button class="nav-btn" onclick="logout()">LOGOUT ➔</button>
+</div>
+</div>
+
+<div class="stats-grid" style="margin-bottom: 16px;">
+<div class="stat-card">
+<div class="stat-value" id="statResellers">0</div>
+<div class="stat-label">RESELLERS</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" id="statKeys">0</div>
+<div class="stat-label">KEYS</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" id="statBalance" style="color:var(--success-green);">0.00</div>
+<div class="stat-label">BALANCE</div>
+</div>
+<div class="stat-card">
+<div class="stat-value" id="statPrice" style="color:var(--accent-glow);">1.00</div>
+<div class="stat-label">PRICE</div>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header active" onclick="toggleAccordion(this)">
+<span>🏷 KEY PRICE</span>
+<span class="accordion-icon">❯</span>
+</div>
+<div class="accordion-content show">
+<div style="text-align: center; margin-bottom: 4px;">
+<div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700;">CURRENT PRICE</div>
+<div style="font-family:'Orbitron'; font-size:1.6rem; color:var(--accent-glow); font-weight:800; text-shadow:var(--neon-glow);" id="currentPriceDisplay">1.00</div>
+</div>
+<input type="number" id="basePriceInput" class="input-field" value="1.00" step="0.1">
+<button class="btn-submit" onclick="updateBasePrice()">💾 UPDATE PRICE</button>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header" onclick="toggleAccordion(this)">
+<span>👤 ADD RESELLER</span>
+<span class="accordion-icon">❯</span>
+</div>
+<div class="accordion-content">
+<input type="text" id="addResellerCode" class="input-field" placeholder="Reseller code">
+<input type="number" id="addResellerBal" class="input-field" placeholder="Initial Balance" value="10">
+<button class="btn-submit" onclick="addNewReseller()">➕ ADD RESELLER</button>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header" onclick="toggleAccordion(this)">
+<span>💲 CHARGE & MANAGE BALANCE</span>
+<span class="accordion-icon">❯</span>
+</div>
+<div class="accordion-content">
+<select id="chargeSelectReseller" class="input-field"></select>
+<input type="number" id="chargeAmount" class="input-field" placeholder="المبلغ (اضافه أو خصم)">
+<div style="display:flex; gap:10px;">
+<button class="btn-submit" style="background:linear-gradient(135deg, #00e676, #00b0ff); box-shadow:var(--neon-green-glow);" onclick="chargeResellerBalance('add')">➕ إضافة رصيد</button>
+<button class="btn-submit" style="background:linear-gradient(135deg, #ff1744, #ff7043); box-shadow:0 0 15px rgba(255,23,68,0.4);" onclick="chargeResellerBalance('deduct')">➖ خصم رصيد</button>
+</div>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header active" onclick="toggleAccordion(this)">
+<span>👥 RESELLERS <span style="font-size:0.75rem; color:var(--accent-glow);" id="totalResellersCount">0 TOTAL</span></span>
+<span class="accordion-icon">❯</span>
+</div>
+<div class="accordion-content show">
+<div class="table-header-action">
+<label style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer; display:flex; align-items:center; gap:5px;">
+<input type="checkbox" id="selectAllCb" onchange="toggleSelectAll(this)"> Select All
+</label>
+<button class="btn-delete-selected" onclick="deleteSelectedResellers()">DELETE SELECTED</button>
+</div>
+<table class="resellers-table">
+<thead>
+<tr>
+<th style="width:20px">#</th>
+<th>CODE</th>
+<th>BAL</th>
+<th>KEYS</th>
+<th style="text-align:center">ACTION</th>
+</tr>
+</thead>
+<tbody id="adminResellersTableBody"></tbody>
+</table>
+</div>
+</div>
+
+<div class="secret-admin-trigger" onclick="secretChangeAdminPasswordPrompt()"></div>
+</div>
+
+<div id="msg" class="msg-box"></div>
+</div>
+
+<script>
+const WEB_API_KEY = 'AIzaSyAzQJuIPLwJsTJ1veR3f4trvfZoGhprduA';
+const FIREBASE_URL = 'https://luxen-pro-default-rtdb.firebaseio.com/';
+
+let activeReseller = null;
+
+function showMsg(txt, color) {
+const msg = document.getElementById('msg');
+if (msg) {
+msg.style.color = color;
+msg.innerHTML = txt;
+setTimeout(() => { msg.innerHTML = ''; }, 4000);
+}
+}
+
+function toggleAccordion(header) {
+header.classList.toggle('active');
+const content = header.nextElementSibling;
+if (content.style.display === "flex" || content.classList.contains('show')) {
+content.style.display = "none";
+content.classList.remove('show');
+} else {
+content.style.display = "flex";
+content.classList.add('show');
+}
+}
+
+function showAdminLogin() {
+document.getElementById('resellerLoginView').classList.add('hidden');
+document.getElementById('adminLoginView').classList.remove('hidden');
+}
+
+function showResellerLogin() {
+document.getElementById('adminLoginView').classList.add('hidden');
+document.getElementById('resellerLoginView').classList.remove('hidden');
+}
+
+function logout() {
+activeReseller = null;
+document.getElementById('resellerPanel').classList.add('hidden');
+document.getElementById('adminPanel').classList.add('hidden');
+document.getElementById('adminLoginView').classList.add('hidden');
+document.getElementById('resellerLoginView').classList.remove('hidden');
+}
+
+async function getAuthToken() {
+try {
+const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${WEB_API_KEY}`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ returnSecureToken: true })
+});
+const data = await res.json();
+return data.idToken;
+} catch (e) { return null; }
+}
+
+async function secretChangeAdminPasswordPrompt() {
+let currentInput = prompt("🔒 Enter current admin password to verify:");
+if (!currentInput) return;
+
+try {
+const token = await getAuthToken();
+const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
+let actualPass = await res.json();
+if (!actualPass) actualPass = "Dhia";
+
+if (currentInput !== actualPass) {
+alert("❌ Incorrect password!");
+return;
+}
+
+let newPass = prompt("✨ Enter NEW admin password:");
+if (!newPass || newPass.trim() === "") return;
+
+await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`, {
+method: 'PUT',
+body: JSON.stringify(newPass.trim())
+});
+alert("✅ Admin password updated successfully!");
+} catch (e) {
+alert("❌ Connection error!");
+}
+}
+
+async function loginAsReseller() {
+let code = document.getElementById('resellerInputCode').value.trim();
+if (!code) { showMsg('⚠ Enter reseller code!', 'var(--danger-red)'); return; }
+
+showMsg('⏳ Checking...', 'var(--accent-glow)');
+try {
+const token = await getAuthToken();
+const res = await fetch(`${FIREBASE_URL}resellers/${code}.json?auth=${token}`);
+const data = await res.json();
+
+if (data === null) {
+showMsg('❌ Reseller code not found!', 'var(--danger-red)');
+return;
+}
+
+activeReseller = code;
+document.getElementById('resellerLoginView').classList.add('hidden');
+document.getElementById('resellerPanel').classList.remove('hidden');
+document.getElementById('resellerDisplayCode').innerText = code;
+loadResellerPanelData();
+} catch (e) {
+showMsg('❌ Connection failed!', 'var(--danger-red)');
+}
+}
+
+async function loginAsAdmin() {
+let pass = document.getElementById('adminInputPass').value.trim();
+if (!pass) { showMsg('⚠ Enter password!', 'var(--danger-red)'); return; }
+
+try {
+const token = await getAuthToken();
+const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
+let adminPass = await res.json();
+if (!adminPass) adminPass = "Dhia";
+
+if (pass === adminPass) {
+document.getElementById('adminLoginView').classList.add('hidden');
+document.getElementById('adminPanel').classList.remove('hidden');
+loadAdminDashboard();
+} else {
+showMsg('❌ Incorrect Admin Password!', 'var(--danger-red)');
+}
+} catch (e) {
+showMsg('❌ Connection error!', 'var(--danger-red)');
+}
+}
+
+async function loadResellerPanelData() {
+try {
+const token = await getAuthToken();
+const res = await fetch(`${FIREBASE_URL}resellers/${activeReseller}.json?auth=${token}`);
+const data = await res.json();
+if (data) {
+document.getElementById('resellerDisplayBalance').innerText = parseFloat(data.balance || 0).toFixed(2);
+
+let keysCount = data.my_keys ? Object.keys(data.my_keys).length : 0;
+document.getElementById('resellerKeysCountBadge').innerText = keysCount;
+
+const keysContainer = document.getElementById('resellerKeysList');
+keysContainer.innerHTML = '';
+if (data.my_keys) {
+for (let k in data.my_keys) {
+let durationText = data.my_keys[k].durationText || 'Custom';
+keysContainer.innerHTML += `<div style="background:rgba(8,14,26,0.9); border:1px solid rgba(0,212,255,0.2); padding:12px; border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;"><div><div class="code-text" style="color:var(--accent-glow);">${k}</div><div style="font-size:0.7rem; color:var(--text-muted);">${durationText} <span style="color:var(--success-green); margin-left:6px; font-weight:700;">[ACTIVE]</span></div></div><div style="display:flex; gap:6px; align-items:center;"><button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}')">📲 SHARE</button><button class="btn-trash" onclick="deleteResellerKey('${k}')">🗑</button></div></div>`;
+}
+} else {
+keysContainer.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.8rem;">No keys created yet</div>';
+}
+}
+} catch (e) {
+showMsg('❌ Error loading data', 'var(--danger-red)');
+}
+}
+
+function copyFullClientText(key, duration) {
+const fullText = `🔥 LUXEN XIT CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n🌐 App Link: https://luxen.xo.je\n\nEnjoy your access!`;
+navigator.clipboard.writeText(fullText).then(() => {
+showMsg('✅ Shared Text Copied!', 'var(--success-green)');
+});
+}
+
+async function deleteResellerKey(keyName) {
+if (!confirm(`هل أنت متأكد من حذف المفتاح: ${keyName}؟`)) return;
+
+showMsg('⏳ جاري الحذف...', 'var(--accent-glow)');
+try {
+const token = await getAuthToken();
+await fetch(`${FIREBASE_URL}keys/${keyName}.json?auth=${token}`, { method: 'DELETE' });
+await fetch(`${FIREBASE_URL}resellers/${activeReseller}/my_keys/${keyName}.json?auth=${token}`, { method: 'DELETE' });
+showMsg('✅ تم حذف المفتاح بنجاح!', 'var(--success-green)');
+loadResellerPanelData();
+} catch (e) {
+showMsg('❌ حدث خطأ أثناء الحذف', 'var(--danger-red)');
+}
+}
+
+async function generateKeys() {
+let durationMs = Number(document.getElementById('keyDurationSelect').value);
+let selectElement = document.getElementById('keyDurationSelect');
+let durationText = selectElement.options[selectElement.selectedIndex].text.split(' - ')[0];
+let qty = parseInt(document.getElementById('keyQuantityInput').value) || 1;
+
+try {
+const token = await getAuthToken();
+const priceRes = await fetch(`${FIREBASE_URL}settings/price.json?auth=${token}`);
+let unitPrice = parseFloat(await priceRes.json()) || 1.00;
+
+const res = await fetch(`${FIREBASE_URL}resellers/${activeReseller}/balance.json?auth=${token}`);
+let balance = parseFloat(await res.json()) || 0;
+let totalCost = unitPrice * qty;
+
+if (balance < totalCost) {
+showMsg('❌ Insufficient balance!', 'var(--danger-red)');
+return;
+}
+
+showMsg('⏳ Generating keys...', 'var(--accent-glow)');
+let newBal = balance - totalCost;
+await fetch(`${FIREBASE_URL}resellers/${activeReseller}/balance.json?auth=${token}`, {
+method: 'PUT',
+body: JSON.stringify(newBal)
+});
+
+const now = Date.now();
+const calculatedExpiry = Number(now + durationMs);
+
+let generatedKeysList = [];
+for (let i = 0; i < qty; i++) {
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+let p1 = '', p2 = '';
+for (let j = 0; j < 4; j++) {
+p1 += chars.charAt(Math.floor(Math.random() * chars.length));
+p2 += chars.charAt(Math.floor(Math.random() * chars.length));
+}
+const newKey = `LUXEN-${p1}-${p2}`;
+generatedKeysList.push(newKey);
+
+const keyPayload = {
+active: true,
+duration: durationText,
+expiry: calculatedExpiry,
+created: now,
+reseller: activeReseller
+};
+
+await fetch(`${FIREBASE_URL}keys/${newKey}.json?auth=${token}`, {
+method: 'PUT',
+body: JSON.stringify(keyPayload)
+});
+
+await fetch(`${FIREBASE_URL}resellers/${activeReseller}/my_keys/${newKey}.json?auth=${token}`, {
+method: 'PUT',
+body: JSON.stringify({
+durationText: durationText,
+expiry: calculatedExpiry
+})
+});
+}
+
+const resultBox = document.getElementById('newKeysResultBox');
+const listContent = document.getElementById('newKeysListContent');
+document.getElementById('newKeysCountNum').innerText = generatedKeysList.length;
+listContent.innerHTML = '';
+
+generatedKeysList.forEach(k => {
+listContent.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(3,7,18,0.9); padding:10px 14px; border-radius:10px; border:1px solid rgba(0,230,118,0.3);"><span class="code-text" style="color:var(--success-green);">${k}</span><button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}')">📲 SHARE</button></div>`;
+});
+resultBox.classList.remove('hidden');
+
+showMsg('✅ Keys generated successfully!', 'var(--success-green)');
+loadResellerPanelData();
+} catch (e) {
+showMsg('❌ Error generating keys!', 'var(--danger-red)');
+}
+}
+
+async function loadAdminDashboard() {
+try {
+const token = await getAuthToken();
+
+const priceRes = await fetch(`${FIREBASE_URL}settings/price.json?auth=${token}`);
+let priceData = await priceRes.json();
+let currentPrice = priceData !== null ? parseFloat(priceData) : 1.00;
+document.getElementById('statPrice').innerText = currentPrice.toFixed(2);
+document.getElementById('currentPriceDisplay').innerText = currentPrice.toFixed(2);
+document.getElementById('basePriceInput').value = currentPrice.toFixed(2);
+
+const keysRes = await fetch(`${FIREBASE_URL}keys.json?auth=${token}`);
+const keysData = await keysRes.json();
+document.getElementById('statKeys').innerText = keysData ? Object.keys(keysData).length : 0;
+
+const resesRes = await fetch(`${FIREBASE_URL}resellers.json?auth=${token}`);
+const resesData = await resesRes.json();
+
+const tbody = document.getElementById('adminResellersTableBody');
+const chargeSelect = document.getElementById('chargeSelectReseller');
+tbody.innerHTML = '';
+chargeSelect.innerHTML = '<option value="">Select Reseller</option>';
+
+let totalResellers = 0;
+let totalBalance = 0;
+
+if (resesData) {
+totalResellers = Object.keys(resesData).length;
+for (let code in resesData) {
+let bal = parseFloat(resesData[code].balance || 0);
+let keysCount = resesData[code].my_keys ? Object.keys(resesData[code].my_keys).length : 0;
+totalBalance += bal;
+
+chargeSelect.innerHTML += `<option value="${code}">${code} (Bal: ${bal})</option>`;
+tbody.innerHTML += `<tr><td><input type="checkbox" class="reseller-cb" value="${code}"></td><td class="code-text">${code}</td><td class="val-green">${bal.toFixed(2)}</td><td class="val-num" style="color:#fff;">${keysCount}</td><td style="text-align:center"><button class="btn-trash" onclick="deleteReseller('${code}')">🗑</button></td></tr>`;
+}
+}
+
+document.getElementById('statResellers').innerText = totalResellers;
+document.getElementById('totalResellersCount').innerText = `${totalResellers} TOTAL`;
+document.getElementById('statBalance').innerText = totalBalance.toFixed(2);
+} catch (e) {
+showMsg('❌ Error loading dashboard', 'var(--danger-red)');
+}
+}
+
+async function updateBasePrice() {
+let p = parseFloat(document.getElementById('basePriceInput').value);
+if (isNaN(p)) return;
+try {
+const token = await getAuthToken();
+await fetch(`${FIREBASE_URL}settings/price.json?auth=${token}`, {
+method: 'PUT',
+body: JSON.stringify(p)
+});
+showMsg('✅ Price updated successfully!', 'var(--success-green)');
+loadAdminDashboard();
+} catch (e) {
+showMsg('❌ Error updating price', 'var(--danger-red)');
+}
+}
+
+async function addNewReseller() {
+let code = document.getElementById('addResellerCode').value.trim();
+let bal = parseFloat(document.getElementById('addResellerBal').value) || 0;
+if (!code) { showMsg('⚠ Enter reseller code!', 'var(--danger-red)'); return; }
+
+try {
+const token = await getAuthToken();
+await fetch(`${FIREBASE_URL}resellers/${code}.json?auth=${token}`, {
+method: 'PATCH',
+body: JSON.stringify({ balance: bal })
+});
+showMsg(`✅ Reseller ${code} added!`, 'var(--success-green)');
+document.getElementById('addResellerCode').value = '';
+loadAdminDashboard();
+} catch (e) {
+showMsg('❌ Error adding reseller', 'var(--danger-red)');
+}
+}
+
+async function chargeResellerBalance(action) {
+let code = document.getElementById('chargeSelectReseller').value;
+let amt = parseFloat(document.getElementById('chargeAmount').value);
+if (!code || isNaN(amt)) { showMsg('⚠ Select reseller & amount!', 'var(--danger-red)'); return; }
+
+try {
+const token = await getAuthToken();
+const res = await fetch(`${FIREBASE_URL}resellers/${code}/balance.json?auth=${token}`);
+let currentBal = parseFloat(await res.json()) || 0;
+
+let newBal = action === 'add' ? currentBal + amt : currentBal - amt;
+if (newBal < 0) newBal = 0;
+
+await fetch(`${FIREBASE_URL}resellers/${code}/balance.json?auth=${token}`, {
+method: 'PUT',
+body: JSON.stringify(newBal)
+});
+showMsg(`⚡ Success! New Balance: ${newBal}`, 'var(--success-green)');
+loadAdminDashboard();
+} catch (e) {
+showMsg('❌ Error charging balance', 'var(--danger-red)');
+}
+}
+
+function toggleSelectAll(master) {
+document.querySelectorAll('.reseller-cb').forEach(cb => cb.checked = master.checked);
+}
+
+async function deleteSelectedResellers() {
+const selected = Array.from(document.querySelectorAll('.reseller-cb:checked')).map(cb => cb.value);
+if (selected.length === 0) { showMsg('⚠ No resellers selected!', 'var(--danger-red)'); return; }
+if (!confirm(`Delete ${selected.length} resellers?`)) return;
+
+try {
+const token = await getAuthToken();
+for (let code of selected) {
+await fetch(`${FIREBASE_URL}resellers/${code}.json?auth=${token}`, { method: 'DELETE' });
+}
+showMsg('🗑 Deleted successfully!', 'var(--success-green)');
+loadAdminDashboard();
+} catch (e) {
+showMsg('❌ Error deleting resellers', 'var(--danger-red)');
+}
+}
+
+async function deleteReseller(code) {
+if (!confirm(`Delete ${code}?`)) return;
+try {
+const token = await getAuthToken();
+await fetch(`${FIREBASE_URL}resellers/${code}.json?auth=${token}`, { method: 'DELETE' });
+loadAdminDashboard();
+} catch (e) {
+showMsg('❌ Error deleting reseller', 'var(--danger-red)');
+}
+}
+</script>
+
+</body>
+</html>
