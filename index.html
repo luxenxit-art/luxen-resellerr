@@ -511,6 +511,7 @@ const WEB_API_KEY = 'AIzaSyAzQJuIPLwJsTJ1veR3f4trvfZoGhprduA';
 const FIREBASE_URL = 'https://luxen-pro-default-rtdb.firebaseio.com/';
 
 let activeReseller = null;
+let currentAdminPassSession = null;
 
 function showMsg(txt, color) {
 const msg = document.getElementById('msg');
@@ -545,6 +546,7 @@ document.getElementById('resellerLoginView').classList.remove('hidden');
 
 function logout() {
 activeReseller = null;
+currentAdminPassSession = null;
 document.getElementById('resellerPanel').classList.add('hidden');
 document.getElementById('adminPanel').classList.add('hidden');
 document.getElementById('adminLoginView').classList.add('hidden');
@@ -563,6 +565,7 @@ return data.idToken;
 } catch (e) { return null; }
 }
 
+// دالة تغيير الباسورد وطرد باقي الأدمن المحفوظين تلقائياً
 async function secretChangeAdminPasswordPrompt() {
 let currentInput = prompt("🔒 Enter current admin password to verify:");
 if (!currentInput) return;
@@ -581,11 +584,20 @@ return;
 let newPass = prompt("✨ Enter NEW admin password:");
 if (!newPass || newPass.trim() === "") return;
 
+// 1. التحديث في السيرفر
 await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`, {
 method: 'PUT',
 body: JSON.stringify(newPass.trim())
 });
-alert("✅ Admin password updated successfully!");
+
+// 2. تحديث وقت التغيير لطرد كل الجلسات المفتوحة
+await fetch(`${FIREBASE_URL}settings/password_changed_at.json?auth=${token}`, {
+method: 'PUT',
+body: JSON.stringify(Date.now())
+});
+
+alert("✅ Admin password updated! All active admin sessions are now logged out.");
+logout();
 } catch (e) {
 alert("❌ Connection error!");
 }
@@ -627,6 +639,7 @@ let adminPass = await res.json();
 if (!adminPass) adminPass = "Dhia";
 
 if (pass === adminPass) {
+currentAdminPassSession = adminPass;
 document.getElementById('adminLoginView').classList.add('hidden');
 document.getElementById('adminPanel').classList.remove('hidden');
 loadAdminDashboard();
@@ -637,6 +650,24 @@ showMsg('❌ Incorrect Admin Password!', 'var(--danger-red)');
 showMsg('❌ Connection error!', 'var(--danger-red)');
 }
 }
+
+// مراقبة دورية للتأكد من أن الباسورد لم تتغير من قبل شخص آخر وطرد الجلسة فوراً
+setInterval(async () => {
+const adminPanel = document.getElementById('adminPanel');
+if (adminPanel && !adminPanel.classList.contains('hidden')) {
+try {
+const token = await getAuthToken();
+const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
+let livePass = await res.json();
+if (!livePass) livePass = "Dhia";
+
+if (currentAdminPassSession && livePass !== currentAdminPassSession) {
+alert("⚠️ Admin password has been changed from another session! You have been logged out.");
+logout();
+}
+} catch (e) {}
+}
+}, 5000);
 
 async function loadResellerPanelData() {
 try {
@@ -666,7 +697,7 @@ showMsg('❌ Error loading data', 'var(--danger-red)');
 }
 
 function copyFullClientText(key, duration) {
-const fullText = `🔥 LUXEN XIT CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n🌐 App Link: https://luxen.xo.je\n\nEnjoy your access!`;
+const fullText = `🔥 LUXEN XIT CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n🌐 App Link: https://luxenwier.rf.gd/?i=1\n\nEnjoy your access!`;
 navigator.clipboard.writeText(fullText).then(() => {
 showMsg('✅ Shared Text Copied!', 'var(--success-green)');
 });
@@ -720,12 +751,12 @@ const calculatedExpiry = Number(now + durationMs);
 let generatedKeysList = [];
 for (let i = 0; i < qty; i++) {
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-let p1 = '', p2 = '';
-for (let j = 0; j < 4; j++) {
-p1 += chars.charAt(Math.floor(Math.random() * chars.length));
-p2 += chars.charAt(Math.floor(Math.random() * chars.length));
-}
-const newKey = `LUXEN-${p1}-${p2}`;
+let p1 = '', p2 = '', p3 = '';
+for (let j = 0; j < 4; j++) p1 += chars.charAt(Math.floor(Math.random() * chars.length));
+for (let j = 0; j < 3; j++) p2 += chars.charAt(Math.floor(Math.random() * chars.length));
+for (let j = 0; j < 3; j++) p3 += chars.charAt(Math.floor(Math.random() * chars.length));
+
+const newKey = `LUXEN-${p1}-${p2}-${p3}`;
 generatedKeysList.push(newKey);
 
 const keyPayload = {
