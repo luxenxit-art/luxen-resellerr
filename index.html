@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUXEN XIT - Dashboard</title>
+<title>LUXEN CLIENT - Reseller Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -287,7 +287,7 @@ border-radius: 50%;
 🛡 RESELLER ACCESS
 </button>
 <div class="brand-logo" style="text-align: left;">
-LUXEN XIT
+LUXEN CLIENT
 <span>DASHBOARD</span>
 </div>
 </div>
@@ -319,7 +319,7 @@ LUXEN XIT
 🛡 ADMIN ACCESS
 </button>
 <div class="brand-logo" style="text-align: left;">
-LUXEN XIT
+LUXEN CLIENT
 <span>DASHBOARD</span>
 </div>
 </div>
@@ -345,7 +345,7 @@ LUXEN XIT
 <!-- ================= 3. لوحة تحكم الموزع ================= -->
 <div id="resellerPanel" class="hidden">
 <div class="header-bar">
-<div class="brand-logo" style="font-size: 1.2rem;">LUXEN XIT<span>DASHBOARD</span></div>
+<div class="brand-logo" style="font-size: 1.2rem;">LUXEN CLIENT<span>DASHBOARD</span></div>
 <div class="nav-btns">
 <button class="nav-btn active">👤 RESELLER</button>
 <button class="nav-btn" onclick="logout()">LOGOUT ➔</button>
@@ -366,6 +366,7 @@ LUXEN XIT
 <span class="accordion-icon">❯</span>
 </div>
 <div class="accordion-content show">
+<label style="font-size:0.7rem; color:var(--text-muted); text-align:right;">Select Key Duration:</label>
 <select id="keyDurationSelect" class="input-field">
 <option value="3600000">1 Hour - 0.50</option>
 <option value="10800000">3 Hours - 1.00</option>
@@ -377,8 +378,17 @@ LUXEN XIT
 <option value="1296000000">15 Days - 6.00</option>
 <option value="2592000000" selected>30 Days - 10.00</option>
 </select>
-<div style="display:flex; align-items:center; gap:10px;">
-<input type="number" id="keyQuantityInput" class="input-field" value="1" min="1" max="10" style="max-width:100px;">
+
+<label style="font-size:0.7rem; color:var(--accent-glow); text-align:right; font-weight:700;">📱 Allowed Devices per Key:</label>
+<select id="keyMaxDevicesSelect" class="input-field" style="border-color:var(--accent-glow);">
+<option value="1" selected>1 Device (متحاص لصخص واحد)</option>
+<option value="2">2 Devices (لجهازين)</option>
+<option value="3">3 Devices (لـ 3 أجهزة)</option>
+<option value="5">5 Devices (لـ 5 أجهزة)</option>
+</select>
+
+<div style="display:flex; align-items:center; gap:10px; margin-top:5px;">
+<input type="number" id="keyQuantityInput" class="input-field" value="1" min="1" max="10" style="max-width:100px;" title="Quantity">
 <button class="btn-submit" onclick="generateKeys()">🔥 GENERATE KEYS</button>
 </div>
 </div>
@@ -405,7 +415,7 @@ LUXEN XIT
 <!-- ================= 4. لوحة تحكم الأدمن ================= -->
 <div id="adminPanel" class="hidden">
 <div class="header-bar">
-<div class="brand-logo" style="font-size: 1.2rem;">LUXEN XIT<span>DASHBOARD</span></div>
+<div class="brand-logo" style="font-size: 1.2rem;">LUXEN CLIENT<span>DASHBOARD</span></div>
 <div class="nav-btns">
 <button class="nav-btn active">⬡ ADMIN</button>
 <button class="nav-btn" onclick="logout()">LOGOUT ➔</button>
@@ -565,7 +575,6 @@ return data.idToken;
 } catch (e) { return null; }
 }
 
-// دالة تغيير الباسورد وطرد باقي الأدمن المحفوظين تلقائياً
 async function secretChangeAdminPasswordPrompt() {
 let currentInput = prompt("🔒 Enter current admin password to verify:");
 if (!currentInput) return;
@@ -584,13 +593,11 @@ return;
 let newPass = prompt("✨ Enter NEW admin password:");
 if (!newPass || newPass.trim() === "") return;
 
-// 1. التحديث في السيرفر
 await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`, {
 method: 'PUT',
 body: JSON.stringify(newPass.trim())
 });
 
-// 2. تحديث وقت التغيير لطرد كل الجلسات المفتوحة
 await fetch(`${FIREBASE_URL}settings/password_changed_at.json?auth=${token}`, {
 method: 'PUT',
 body: JSON.stringify(Date.now())
@@ -651,7 +658,6 @@ showMsg('❌ Connection error!', 'var(--danger-red)');
 }
 }
 
-// مراقبة دورية للتأكد من أن الباسورد لم تتغير من قبل شخص آخر وطرد الجلسة فوراً
 setInterval(async () => {
 const adminPanel = document.getElementById('adminPanel');
 if (adminPanel && !adminPanel.classList.contains('hidden')) {
@@ -685,7 +691,8 @@ keysContainer.innerHTML = '';
 if (data.my_keys) {
 for (let k in data.my_keys) {
 let durationText = data.my_keys[k].durationText || 'Custom';
-keysContainer.innerHTML += `<div style="background:rgba(8,14,26,0.9); border:1px solid rgba(0,212,255,0.2); padding:12px; border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;"><div><div class="code-text" style="color:var(--accent-glow);">${k}</div><div style="font-size:0.7rem; color:var(--text-muted);">${durationText} <span style="color:var(--success-green); margin-left:6px; font-weight:700;">[ACTIVE]</span></div></div><div style="display:flex; gap:6px; align-items:center;"><button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}')">📲 SHARE</button><button class="btn-trash" onclick="deleteResellerKey('${k}')">🗑</button></div></div>`;
+let maxDev = data.my_keys[k].maxDevices || 1;
+keysContainer.innerHTML += `<div style="background:rgba(8,14,26,0.9); border:1px solid rgba(0,212,255,0.2); padding:12px; border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;"><div><div class="code-text" style="color:var(--accent-glow);">${k}</div><div style="font-size:0.7rem; color:var(--text-muted);">${durationText} · <span style="color:var(--accent-glow);">${maxDev} Dev</span> <span style="color:var(--success-green); margin-left:4px; font-weight:700;">[ACTIVE]</span></div></div><div style="display:flex; gap:6px; align-items:center;"><button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}', ${maxDev})">📲 SHARE</button><button class="btn-trash" onclick="deleteResellerKey('${k}')">🗑</button></div></div>`;
 }
 } else {
 keysContainer.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.8rem;">No keys created yet</div>';
@@ -696,8 +703,8 @@ showMsg('❌ Error loading data', 'var(--danger-red)');
 }
 }
 
-function copyFullClientText(key, duration) {
-const fullText = `🔥 LUXEN XIT CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n🌐 App Link: https://luxenwier.rf.gd/?i=1\n\nEnjoy your access!`;
+function copyFullClientText(key, duration, maxDev) {
+const fullText = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Allowed Devices: ${maxDev}\n🌐 App Link: https://luxenxit.github.io/\n\nEnjoy your access!`;
 navigator.clipboard.writeText(fullText).then(() => {
 showMsg('✅ Shared Text Copied!', 'var(--success-green)');
 });
@@ -722,6 +729,7 @@ async function generateKeys() {
 let durationMs = Number(document.getElementById('keyDurationSelect').value);
 let selectElement = document.getElementById('keyDurationSelect');
 let durationText = selectElement.options[selectElement.selectedIndex].text.split(' - ')[0];
+let maxDevices = parseInt(document.getElementById('keyMaxDevicesSelect').value) || 1;
 let qty = parseInt(document.getElementById('keyQuantityInput').value) || 1;
 
 try {
@@ -764,7 +772,9 @@ active: true,
 duration: durationText,
 expiry: calculatedExpiry,
 created: now,
-reseller: activeReseller
+reseller: activeReseller,
+maxDevices: maxDevices,
+devices: {}
 };
 
 await fetch(`${FIREBASE_URL}keys/${newKey}.json?auth=${token}`, {
@@ -776,7 +786,8 @@ await fetch(`${FIREBASE_URL}resellers/${activeReseller}/my_keys/${newKey}.json?a
 method: 'PUT',
 body: JSON.stringify({
 durationText: durationText,
-expiry: calculatedExpiry
+expiry: calculatedExpiry,
+maxDevices: maxDevices
 })
 });
 }
@@ -787,7 +798,7 @@ document.getElementById('newKeysCountNum').innerText = generatedKeysList.length;
 listContent.innerHTML = '';
 
 generatedKeysList.forEach(k => {
-listContent.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(3,7,18,0.9); padding:10px 14px; border-radius:10px; border:1px solid rgba(0,230,118,0.3);"><span class="code-text" style="color:var(--success-green);">${k}</span><button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}')">📲 SHARE</button></div>`;
+listContent.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(3,7,18,0.9); padding:10px 14px; border-radius:10px; border:1px solid rgba(0,230,118,0.3);"><span class="code-text" style="color:var(--success-green);">${k}</span><button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}', ${maxDevices})">📲 SHARE</button></div>`;
 });
 resultBox.classList.remove('hidden');
 
