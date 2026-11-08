@@ -387,7 +387,6 @@ LUXEN XIT
 </div>
 <div class="accordion-content show">
 
-<!-- 1. تصفح وتحديد مدة الاشتراكات -->
 <div style="font-size: 0.7rem; color: var(--accent-glow); font-weight: 700; text-align: right; margin-bottom: -6px;">مدة المفتاح (DURATION)</div>
 <select id="keyDurationSelect" class="input-field">
 <option value="3600000">1 Hour - 0.50</option>
@@ -401,7 +400,6 @@ LUXEN XIT
 <option value="2592000000" selected>30 Days - 10.00</option>
 </select>
 
-<!-- 2. تحديد عدد الأجهزة المسموحة (جاهز 1، جاهز 2، جاهز 3) -->
 <div style="font-size: 0.7rem; color: var(--accent-glow); font-weight: 700; text-align: right; margin-bottom: -6px;">عدد الأجهزة المسموحة (ALLOWED DEVICES)</div>
 <select id="keyMaxDevicesSelect" class="input-field">
 <option value="1" selected>📱 جهاز 1 فقط (1 Device)</option>
@@ -410,7 +408,6 @@ LUXEN XIT
 <option value="5">💻 5 أجهزة (5 Devices)</option>
 </select>
 
-<!-- 3. عدد المفاتيح المراد توليدها -->
 <div style="display:flex; align-items:center; gap:10px; margin-top:5px;">
 <input type="number" id="keyQuantityInput" class="input-field" value="1" min="1" max="10" style="max-width:100px;" title="كمية المفاتيح">
 <button class="btn-submit" onclick="generateKeys()">🔥 GENERATE KEYS</button>
@@ -726,8 +723,7 @@ document.getElementById('resellerKeysCountBadge').innerText = keysCount;
 const keysContainer = document.getElementById('resellerKeysList');
 keysContainer.innerHTML = '';
 if (data.my_keys && Object.keys(data.my_keys).length > 0) {
-// ترقيم المفاتيح يبدأ دائماً من 1
-let index = 1; 
+let index = 1;
 for (let k in data.my_keys) {
 let durationText = data.my_keys[k].durationText || 'Custom';
 let devicesAllowed = data.my_keys[k].devicesAllowed || '1';
@@ -754,10 +750,9 @@ showMsg('❌ Error loading data', 'var(--danger-red)');
 }
 }
 
-// دالة النسخ والمشاركة المحدثة التي تحتوي على رابط App Link وعدد الأجهزة وكود الموزعين
+// تم تعديل دالة النسخ والمشاركة بحيث لا تتضمن سطر كود الموزعين
 function copyFullClientText(key, duration, devices = "1") {
-const resellerCode = activeReseller || "ADMIN";
-const fullText = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Allowed Devices: ${devices}\n🌐 App Link: https://luxenwier.rf.gd/?i=1\n🎟️ كود الموزعين: ${resellerCode}\n\nEnjoy your access!`;
+const fullText = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Allowed Devices: ${devices}\n🌐 App Link: https://luxenwier.rf.gd/?i=1\n\nEnjoy your access!`;
 navigator.clipboard.writeText(fullText).then(() => {
 showMsg('✅ Shared Text Copied!', 'var(--success-green)');
 });
@@ -830,9 +825,7 @@ let durationMs = Number(document.getElementById('keyDurationSelect').value);
 let selectElement = document.getElementById('keyDurationSelect');
 let durationText = selectElement.options[selectElement.selectedIndex].text.split(' - ')[0];
 
-// قراءة عدد الأجهزة المسموحة من القائمة
 let devicesAllowed = document.getElementById('keyMaxDevicesSelect').value;
-
 let qty = parseInt(document.getElementById('keyQuantityInput').value) || 1;
 
 try {
