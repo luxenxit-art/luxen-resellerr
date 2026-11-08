@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUXEN XIT - Dashboard</title>
+<title>LUXEN CLIENT - Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
 --bg-dark: #03060f;
 --card-bg: #080e1a;
---card-border: rgba(0, 212, 255, 0.3);
---accent-blue: #0088ff;
---accent-glow: #00d4ff;
+--card-border: rgba(33, 150, 243, 0.3);
+--accent-blue: #2196F3;
+--accent-glow: #42A5F5;
 --text-white: #ffffff;
---text-muted: #94a3b8;
---danger-red: #ff1744;
---success-green: #00e676;
---neon-glow: 0 0 15px rgba(0, 212, 255, 0.4);
+--text-muted: #888888;
+--danger-red: #FF1744;
+--success-green: #00E676;
+--neon-glow: 0 0 15px rgba(33, 150, 243, 0.4);
 --neon-green-glow: 0 0 15px rgba(0, 230, 118, 0.4);
 --neon-red-glow: 0 0 15px rgba(255, 23, 68, 0.5);
 }
 * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
 body {
-background: radial-gradient(circle at center, #0a1128 0%, var(--bg-dark) 100%);
+background: radial-gradient(circle at center, #141414 0%, var(--bg-dark) 100%);
 color: var(--text-white);
 min-height: 100vh;
 padding: 20px 15px;
@@ -59,11 +59,11 @@ letter-spacing: 1.5px;
 font-style: italic;
 line-height: 1.1;
 color: #fff;
-text-shadow: 0 0 10px rgba(0,212,255,0.5);
+text-shadow: 0 0 10px rgba(33,150,243,0.5);
 }
 .brand-logo span { display: block; font-size: 0.75rem; color: var(--accent-glow); letter-spacing: 3px; font-style: normal; margin-top: 2px; text-shadow: 0 0 8px var(--accent-glow); }
 .top-pill-btn {
-background: rgba(0, 136, 255, 0.15);
+background: rgba(33, 150, 243, 0.15);
 border: 1px solid var(--accent-glow);
 color: var(--accent-glow);
 padding: 6px 14px;
@@ -80,10 +80,10 @@ gap: 6px;
 box-shadow: var(--neon-glow);
 transition: 0.2s;
 }
-.top-pill-btn:hover { background: rgba(0, 212, 255, 0.3); }
+.top-pill-btn:hover { background: rgba(33, 150, 243, 0.3); }
 .nav-btns { display: flex; gap: 8px; }
 .nav-btn {
-background: rgba(11, 17, 31, 0.9);
+background: rgba(20, 20, 20, 0.9);
 border: 1px solid var(--card-border);
 color: var(--text-muted);
 padding: 6px 14px;
@@ -100,8 +100,8 @@ transition: 0.3s;
 }
 .nav-btn.active { color: var(--accent-glow); border-color: var(--accent-glow); box-shadow: var(--neon-glow); }
 .btn-share-vibrant {
-background: linear-gradient(135deg, #00c6ff, #0072ff);
-border: 1px solid #00d4ff;
+background: linear-gradient(135deg, #2196F3, #1976D2);
+border: 1px solid #42A5F5;
 color: #fff;
 padding: 8px 14px;
 border-radius: 12px;
@@ -109,13 +109,13 @@ font-size: 0.75rem;
 font-weight: 800;
 cursor: pointer;
 text-transform: uppercase;
-box-shadow: 0 0 15px rgba(0, 114, 255, 0.6);
+box-shadow: 0 0 15px rgba(33, 150, 243, 0.6);
 display: inline-flex;
 align-items: center;
 gap: 5px;
 transition: 0.3s;
 }
-.btn-share-vibrant:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(0, 212, 255, 0.8); }
+.btn-share-vibrant:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(33, 150, 243, 0.8); }
 .stats-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -127,7 +127,7 @@ border: 1px solid var(--card-border);
 border-radius: 16px;
 padding: 16px;
 text-align: center;
-box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0, 136, 255, 0.1);
+box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(33, 150, 243, 0.1);
 }
 .stat-value {
 font-family: 'Orbitron', sans-serif;
@@ -135,7 +135,7 @@ font-size: 1.6rem;
 font-weight: 800;
 color: #fff;
 margin-bottom: 2px;
-text-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+text-shadow: 0 0 12px rgba(33, 150, 243, 0.6);
 }
 .stat-label {
 font-size: 0.7rem;
@@ -177,7 +177,7 @@ gap: 12px;
 .accordion-content.show { display: flex; }
 .input-field {
 width: 100%;
-background: #030712;
+background: #0A0A0A;
 border: 1px solid var(--card-border);
 border-radius: 12px;
 padding: 14px;
@@ -189,10 +189,10 @@ outline: none;
 transition: 0.3s;
 box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
 }
-.input-field:focus { border-color: var(--accent-glow); box-shadow: var(--neon-glow), inset 0 0 8px rgba(0, 212, 255, 0.2); }
+.input-field:focus { border-color: var(--accent-glow); box-shadow: var(--neon-glow), inset 0 0 8px rgba(33, 150, 243, 0.2); }
 .btn-submit {
 width: 100%;
-background: linear-gradient(135deg, #0051ff, #00d4ff);
+background: linear-gradient(135deg, #1976D2, #2196F3);
 border: 1px solid var(--accent-glow);
 border-radius: 12px;
 color: #fff;
@@ -205,10 +205,10 @@ cursor: pointer;
 box-shadow: var(--neon-glow);
 transition: 0.3s;
 }
-.btn-submit:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 0 25px rgba(0, 212, 255, 0.7); }
+.btn-submit:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 0 25px rgba(33, 150, 243, 0.7); }
 .btn-danger-all {
 width: 100%;
-background: linear-gradient(135deg, #ff0033, #b30000);
+background: linear-gradient(135deg, #FF1744, #B71C1C);
 border: 1px solid var(--danger-red);
 border-radius: 12px;
 color: #fff;
@@ -229,7 +229,7 @@ align-items: center;
 margin-bottom: 10px;
 }
 .btn-delete-selected {
-background: linear-gradient(135deg, #ff0033, #ff4b2b);
+background: linear-gradient(135deg, #FF1744, #D32F2F);
 color: #fff;
 border: none;
 padding: 8px 16px;
@@ -237,7 +237,7 @@ border-radius: 10px;
 font-size: 0.75rem;
 font-weight: 800;
 cursor: pointer;
-box-shadow: 0 0 12px rgba(255, 0, 51, 0.5);
+box-shadow: 0 0 12px rgba(255, 23, 68, 0.5);
 }
 .resellers-table {
 width: 100%;
@@ -270,7 +270,7 @@ box-shadow: 0 0 10px rgba(255, 23, 68, 0.3);
 transition: 0.3s;
 }
 .btn-trash:hover { background: rgba(255, 23, 68, 0.3); box-shadow: 0 0 15px rgba(255, 23, 68, 0.6); }
-.msg-box { font-size: 0.8rem; text-align: center; min-height: 18px; margin-top: 4px; font-weight: 700; text-shadow: 0 0 10px rgba(0,212,255,0.4); }
+.msg-box { font-size: 0.8rem; text-align: center; min-height: 18px; margin-top: 4px; font-weight: 700; text-shadow: 0 0 10px rgba(33,150,243,0.4); }
 .hidden { display: none !important; }
 .auth-container-center {
 display: flex;
@@ -307,8 +307,8 @@ border-radius: 50%;
 🛡 RESELLER ACCESS
 </button>
 <div class="brand-logo" style="text-align: left;">
-LUXEN XIT
-<span>DASHBOARD</span>
+LUXEN
+<span>CLIENT</span>
 </div>
 </div>
 
@@ -332,15 +332,15 @@ LUXEN XIT
 </div>
 </div>
 
-<!-- ================= 2. شاشة تسجيل دخول الأدمن ================= -->
+<!-- ================= 2. شاشة تسجيل دخول الأدمن (مصححة) ================= -->
 <div id="adminLoginView" class="auth-container-center hidden">
 <div class="brand-logo-container">
 <button class="top-pill-btn" onclick="showResellerLogin()">
 🛡 ADMIN ACCESS
 </button>
 <div class="brand-logo" style="text-align: left;">
-LUXEN XIT
-<span>DASHBOARD</span>
+LUXEN
+<span>CLIENT</span>
 </div>
 </div>
 
@@ -365,7 +365,7 @@ LUXEN XIT
 <!-- ================= 3. لوحة تحكم الموزع ================= -->
 <div id="resellerPanel" class="hidden">
 <div class="header-bar">
-<div class="brand-logo" style="font-size: 1.2rem;">LUXEN XIT<span>DASHBOARD</span></div>
+<div class="brand-logo" style="font-size: 1.2rem;">LUXEN<span>CLIENT</span></div>
 <div class="nav-btns">
 <button class="nav-btn active">👤 RESELLER</button>
 <button class="nav-btn" onclick="logout()">LOGOUT ➔</button>
@@ -439,7 +439,7 @@ LUXEN XIT
 <!-- ================= 4. لوحة تحكم الأدمن ================= -->
 <div id="adminPanel" class="hidden">
 <div class="header-bar">
-<div class="brand-logo" style="font-size: 1.2rem;">LUXEN XIT<span>DASHBOARD</span></div>
+<div class="brand-logo" style="font-size: 1.2rem;">LUXEN<span>CLIENT</span></div>
 <div class="nav-btns">
 <button class="nav-btn active">⬡ ADMIN</button>
 <button class="nav-btn" onclick="logout()">LOGOUT ➔</button>
@@ -511,8 +511,8 @@ LUXEN XIT
 <select id="chargeSelectReseller" class="input-field"></select>
 <input type="number" id="chargeAmount" class="input-field" placeholder="المبلغ (اضافه أو خصم)">
 <div style="display:flex; gap:10px;">
-<button class="btn-submit" style="background:linear-gradient(135deg, #00e676, #00b0ff); box-shadow:var(--neon-green-glow);" onclick="chargeResellerBalance('add')">➕ إضافة رصيد</button>
-<button class="btn-submit" style="background:linear-gradient(135deg, #ff1744, #ff7043); box-shadow:0 0 15px rgba(255,23,68,0.4);" onclick="chargeResellerBalance('deduct')">➖ خصم رصيد</button>
+<button class="btn-submit" style="background:linear-gradient(135deg, #00E676, #2196F3); box-shadow:var(--neon-green-glow);" onclick="chargeResellerBalance('add')">➕ إضافة رصيد</button>
+<button class="btn-submit" style="background:linear-gradient(135deg, #FF1744, #ff7043); box-shadow:0 0 15px rgba(255,23,68,0.4);" onclick="chargeResellerBalance('deduct')">➖ خصم رصيد</button>
 </div>
 </div>
 </div>
@@ -617,7 +617,8 @@ try {
 const token = await getAuthToken();
 const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
 let actualPass = await res.json();
-if (!actualPass) actualPass = "Dhia";
+if (actualPass) actualPass = String(actualPass).replace(/["']/g, "").trim();
+else actualPass = "Dhia";
 
 if (currentInput !== actualPass) {
 alert("❌ Incorrect password!");
@@ -632,12 +633,7 @@ method: 'PUT',
 body: JSON.stringify(newPass.trim())
 });
 
-await fetch(`${FIREBASE_URL}settings/password_changed_at.json?auth=${token}`, {
-method: 'PUT',
-body: JSON.stringify(Date.now())
-});
-
-alert("✅ Admin password updated! All active admin sessions are now logged out.");
+alert("✅ Admin password updated!");
 logout();
 } catch (e) {
 alert("❌ Connection error!");
@@ -669,6 +665,7 @@ showMsg('❌ Connection failed!', 'var(--danger-red)');
 }
 }
 
+// 🛡️ [مصحح] دالة تسجيل دخول الأدمن المطورة لإزالة الفراغات وعلامات التنصيص وحل مشكلة عدم الدخول
 async function loginAsAdmin() {
 let pass = document.getElementById('adminInputPass').value.trim();
 if (!pass) { showMsg('⚠ Enter password!', 'var(--danger-red)'); return; }
@@ -677,7 +674,12 @@ try {
 const token = await getAuthToken();
 const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
 let adminPass = await res.json();
-if (!adminPass) adminPass = "Dhia";
+
+if (adminPass !== null && adminPass !== undefined) {
+adminPass = String(adminPass).replace(/["']/g, "").trim();
+} else {
+adminPass = "Dhia"; // كلمة السر الافتراضية المعتمدة
+}
 
 if (pass === adminPass) {
 currentAdminPassSession = adminPass;
@@ -691,23 +693,6 @@ showMsg('❌ Incorrect Admin Password!', 'var(--danger-red)');
 showMsg('❌ Connection error!', 'var(--danger-red)');
 }
 }
-
-setInterval(async () => {
-const adminPanel = document.getElementById('adminPanel');
-if (adminPanel && !adminPanel.classList.contains('hidden')) {
-try {
-const token = await getAuthToken();
-const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
-let livePass = await res.json();
-if (!livePass) livePass = "Dhia";
-
-if (currentAdminPassSession && livePass !== currentAdminPassSession) {
-alert("⚠️ Admin password has been changed from another session! You have been logged out.");
-logout();
-}
-} catch (e) {}
-}
-}, 5000);
 
 async function loadResellerPanelData() {
 try {
@@ -729,7 +714,7 @@ let durationText = data.my_keys[k].durationText || 'Custom';
 let devicesAllowed = data.my_keys[k].devicesAllowed || '1';
 
 keysContainer.innerHTML += `
-<div style="background:rgba(8,14,26,0.9); border:1px solid rgba(0,212,255,0.2); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+<div style="background:rgba(20,20,20,0.9); border:1px solid rgba(33,150,243,0.2); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
 <div>
 <div class="code-text" style="color:var(--accent-glow);"><span style="color:var(--text-muted); font-size:0.75rem;">#${index}</span> ${k}</div>
 <div style="font-size:0.7rem; color:var(--text-muted);">${durationText} | 📱 devices: ${devicesAllowed} <span style="color:var(--success-green); margin-left:6px; font-weight:700;">[ACTIVE]</span></div>
@@ -750,7 +735,6 @@ showMsg('❌ Error loading data', 'var(--danger-red)');
 }
 }
 
-// تم تعديل دالة النسخ والمشاركة بحيث لا تتضمن سطر كود الموزعين
 function copyFullClientText(key, duration, devices = "1") {
 const fullText = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Allowed Devices: ${devices}\n🌐 App Link: https://luxenwier.rf.gd/?i=1\n\nEnjoy your access!`;
 navigator.clipboard.writeText(fullText).then(() => {
@@ -802,7 +786,6 @@ if (!confirm('⚠️ تحذير أدمن: هل أنت متأكد من حذف ج�
 showMsg('⏳ جاري مسح كافة المفاتيح من النظام...', 'var(--accent-glow)');
 try {
 const token = await getAuthToken();
-
 await fetch(`${FIREBASE_URL}keys.json?auth=${token}`, { method: 'DELETE' });
 
 const res = await fetch(`${FIREBASE_URL}resellers.json?auth=${token}`);
@@ -857,10 +840,11 @@ for (let i = 0; i < qty; i++) {
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 let p1 = '', p2 = '', p3 = '';
 for (let j = 0; j < 4; j++) p1 += chars.charAt(Math.floor(Math.random() * chars.length));
-for (let j = 0; j < 3; j++) p2 += chars.charAt(Math.floor(Math.random() * chars.length));
-for (let j = 0; j < 3; j++) p3 += chars.charAt(Math.floor(Math.random() * chars.length));
+for (let j = 0; j < 4; j++) p2 += chars.charAt(Math.floor(Math.random() * chars.length));
+for (let j = 0; j < 4; j++) p3 += chars.charAt(Math.floor(Math.random() * chars.length));
 
-const newKey = `LUXEN-${p1}-${p2}-${p3}`;
+// 🔒 الصيغة الأمنية المعتمدة: LUXEN_XXXX_XXXX_XXXX
+const newKey = `LUXEN_${p1}_${p2}_${p3}`;
 generatedKeysList.push(newKey);
 
 const keyPayload = {
@@ -894,7 +878,7 @@ listContent.innerHTML = '';
 
 generatedKeysList.forEach((k, index) => {
 listContent.innerHTML += `
-<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(3,7,18,0.9); padding:10px 14px; border-radius:10px; border:1px solid rgba(0,230,118,0.3);">
+<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(10,10,10,0.9); padding:10px 14px; border-radius:10px; border:1px solid rgba(0,230,118,0.3);">
 <div><span style="font-size:0.75rem; color:var(--text-muted);">#${index + 1}</span> <span class="code-text" style="color:var(--success-green);">${k}</span></div>
 <button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}', '${devicesAllowed}')">📲 SHARE</button>
 </div>`;
