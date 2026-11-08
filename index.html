@@ -81,19 +81,6 @@ box-shadow: var(--neon-glow);
 transition: 0.2s;
 }
 .top-pill-btn:hover { background: rgba(0, 212, 255, 0.3); }
-.quick-qty-btn {
-flex: 1;
-background: rgba(0, 212, 255, 0.1);
-border: 1px solid var(--card-border);
-color: var(--accent-glow);
-padding: 8px;
-border-radius: 10px;
-font-weight: 800;
-cursor: pointer;
-font-size: 0.8rem;
-transition: 0.3s;
-}
-.quick-qty-btn:hover { background: var(--accent-glow); color: #000; box-shadow: var(--neon-glow); }
 .nav-btns { display: flex; gap: 8px; }
 .nav-btn {
 background: rgba(11, 17, 31, 0.9);
@@ -399,6 +386,9 @@ LUXEN XIT
 <span class="accordion-icon">❯</span>
 </div>
 <div class="accordion-content show">
+
+<!-- 1. تصفح وتحديد مدة الاشتراكات -->
+<div style="font-size: 0.7rem; color: var(--accent-glow); font-weight: 700; text-align: right; margin-bottom: -6px;">مدة المفتاح (DURATION)</div>
 <select id="keyDurationSelect" class="input-field">
 <option value="3600000">1 Hour - 0.50</option>
 <option value="10800000">3 Hours - 1.00</option>
@@ -411,15 +401,18 @@ LUXEN XIT
 <option value="2592000000" selected>30 Days - 10.00</option>
 </select>
 
-<!-- أزرار اختيار العدد الجاهز 1، 2، 3 -->
-<div style="display:flex; gap:8px;">
-<button class="quick-qty-btn" onclick="setQuickQuantity(1)">⚡ جاهز 1</button>
-<button class="quick-qty-btn" onclick="setQuickQuantity(2)">⚡ جاهز 2</button>
-<button class="quick-qty-btn" onclick="setQuickQuantity(3)">⚡ جاهز 3</button>
-</div>
+<!-- 2. تحديد عدد الأجهزة المسموحة (جاهز 1، جاهز 2، جاهز 3) -->
+<div style="font-size: 0.7rem; color: var(--accent-glow); font-weight: 700; text-align: right; margin-bottom: -6px;">عدد الأجهزة المسموحة (ALLOWED DEVICES)</div>
+<select id="keyMaxDevicesSelect" class="input-field">
+<option value="1" selected>📱 جهاز 1 فقط (1 Device)</option>
+<option value="2">📱📱 جهازين (2 Devices)</option>
+<option value="3">📱📱📱 3 أجهزة (3 Devices)</option>
+<option value="5">💻 5 أجهزة (5 Devices)</option>
+</select>
 
-<div style="display:flex; align-items:center; gap:10px;">
-<input type="number" id="keyQuantityInput" class="input-field" value="1" min="1" max="10" style="max-width:100px;">
+<!-- 3. عدد المفاتيح المراد توليدها -->
+<div style="display:flex; align-items:center; gap:10px; margin-top:5px;">
+<input type="number" id="keyQuantityInput" class="input-field" value="1" min="1" max="10" style="max-width:100px;" title="كمية المفاتيح">
 <button class="btn-submit" onclick="generateKeys()">🔥 GENERATE KEYS</button>
 </div>
 </div>
@@ -475,7 +468,6 @@ LUXEN XIT
 </div>
 </div>
 
-<!-- قسم زر الأدمن الرئيسي لحذف كافة المفاتيح -->
 <div class="accordion-item">
 <div class="accordion-header active" onclick="toggleAccordion(this)">
 <span>⚠️ SYSTEM KEYS CONTROL</span>
@@ -575,11 +567,6 @@ msg.style.color = color;
 msg.innerHTML = txt;
 setTimeout(() => { msg.innerHTML = ''; }, 4000);
 }
-}
-
-function setQuickQuantity(qty) {
-document.getElementById('keyQuantityInput').value = qty;
-showMsg(`⚡ تم تحديد العدد (${qty})`, 'var(--accent-glow)');
 }
 
 function toggleAccordion(header) {
@@ -739,17 +726,20 @@ document.getElementById('resellerKeysCountBadge').innerText = keysCount;
 const keysContainer = document.getElementById('resellerKeysList');
 keysContainer.innerHTML = '';
 if (data.my_keys && Object.keys(data.my_keys).length > 0) {
-let index = 1;
+// ترقيم المفاتيح يبدأ دائماً من 1
+let index = 1; 
 for (let k in data.my_keys) {
 let durationText = data.my_keys[k].durationText || 'Custom';
+let devicesAllowed = data.my_keys[k].devicesAllowed || '1';
+
 keysContainer.innerHTML += `
 <div style="background:rgba(8,14,26,0.9); border:1px solid rgba(0,212,255,0.2); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
 <div>
 <div class="code-text" style="color:var(--accent-glow);"><span style="color:var(--text-muted); font-size:0.75rem;">#${index}</span> ${k}</div>
-<div style="font-size:0.7rem; color:var(--text-muted);">${durationText} <span style="color:var(--success-green); margin-left:6px; font-weight:700;">[ACTIVE]</span></div>
+<div style="font-size:0.7rem; color:var(--text-muted);">${durationText} | 📱 devices: ${devicesAllowed} <span style="color:var(--success-green); margin-left:6px; font-weight:700;">[ACTIVE]</span></div>
 </div>
 <div style="display:flex; gap:6px; align-items:center;">
-<button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}')">📲 SHARE ${index}</button>
+<button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}', '${devicesAllowed}')">📲 SHARE</button>
 <button class="btn-trash" onclick="deleteResellerKey('${k}')">🗑</button>
 </div>
 </div>`;
@@ -764,9 +754,10 @@ showMsg('❌ Error loading data', 'var(--danger-red)');
 }
 }
 
-function copyFullClientText(key, duration) {
+// دالة النسخ والمشاركة المحدثة التي تحتوي على رابط App Link وعدد الأجهزة وكود الموزعين
+function copyFullClientText(key, duration, devices = "1") {
 const resellerCode = activeReseller || "ADMIN";
-const fullText = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Allowed Devices: 1\n🌐 App Link: https://luxenwier.rf.gd/?i=1\n🎟️ كود الموزعين: ${resellerCode}\n\nEnjoy your access!`;
+const fullText = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Allowed Devices: ${devices}\n🌐 App Link: https://luxenwier.rf.gd/?i=1\n🎟️ كود الموزعين: ${resellerCode}\n\nEnjoy your access!`;
 navigator.clipboard.writeText(fullText).then(() => {
 showMsg('✅ Shared Text Copied!', 'var(--success-green)');
 });
@@ -838,6 +829,10 @@ async function generateKeys() {
 let durationMs = Number(document.getElementById('keyDurationSelect').value);
 let selectElement = document.getElementById('keyDurationSelect');
 let durationText = selectElement.options[selectElement.selectedIndex].text.split(' - ')[0];
+
+// قراءة عدد الأجهزة المسموحة من القائمة
+let devicesAllowed = document.getElementById('keyMaxDevicesSelect').value;
+
 let qty = parseInt(document.getElementById('keyQuantityInput').value) || 1;
 
 try {
@@ -878,6 +873,7 @@ generatedKeysList.push(newKey);
 const keyPayload = {
 active: true,
 duration: durationText,
+devicesAllowed: devicesAllowed,
 expiry: calculatedExpiry,
 created: now,
 reseller: activeReseller
@@ -892,6 +888,7 @@ await fetch(`${FIREBASE_URL}resellers/${activeReseller}/my_keys/${newKey}.json?a
 method: 'PUT',
 body: JSON.stringify({
 durationText: durationText,
+devicesAllowed: devicesAllowed,
 expiry: calculatedExpiry
 })
 });
@@ -906,7 +903,7 @@ generatedKeysList.forEach((k, index) => {
 listContent.innerHTML += `
 <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(3,7,18,0.9); padding:10px 14px; border-radius:10px; border:1px solid rgba(0,230,118,0.3);">
 <div><span style="font-size:0.75rem; color:var(--text-muted);">#${index + 1}</span> <span class="code-text" style="color:var(--success-green);">${k}</span></div>
-<button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}')">📲 SHARE ${index + 1}</button>
+<button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}', '${devicesAllowed}')">📲 SHARE</button>
 </div>`;
 });
 resultBox.classList.remove('hidden');
