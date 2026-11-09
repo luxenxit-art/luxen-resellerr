@@ -640,7 +640,6 @@ alert("❌ Connection error!");
 }
 }
 
-// 🛡️ [تحديث تلقائي وآمن] دالة تسجيل الموزع: تصحح هيكل الموزع في قاعدة البيانات فور دخوله
 async function loginAsReseller() {
 let code = document.getElementById('resellerInputCode').value.trim().replace(/\s+/g, '_');
 if (!code) { showMsg('⚠ Enter reseller code!', 'var(--danger-red)'); return; }
@@ -656,7 +655,6 @@ showMsg('❌ Reseller code not found!', 'var(--danger-red)');
 return;
 }
 
-// إذا كان الحساب قديم أو مسجل كقيمة نصية غير مهيكلة، يتم إصلاحه فوراً وتصحيح مجلده
 if (typeof data !== 'object' || data === null) {
 let initialBalance = typeof data === 'number' ? data : 0;
 data = { balance: initialBalance, my_keys: {} };
@@ -727,7 +725,7 @@ keysContainer.innerHTML += `
 <div style="background:rgba(20,20,20,0.9); border:1px solid rgba(33,150,243,0.2); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
 <div>
 <div class="code-text" style="color:var(--accent-glow);"><span style="color:var(--text-muted); font-size:0.75rem;">#${index}</span> ${k}</div>
-<div style="font-size:0.7rem; color:var(--text-muted);">${durationText} | 📱 devices: ${devicesAllowed} <span style="color:var(--success-green); margin-left:6px; font-weight:700;">[ACTIVE]</span></div>
+<div style="font-size:0.7rem; color:var(--text-muted);">${durationText} | 📱 devices: ${devicesAllowed} <span style="color:var(--success-green); margin-left:6px; font-weight:700;">[READY]</span></div>
 </div>
 <div style="display:flex; gap:6px; align-items:center;">
 <button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}', '${devicesAllowed}')">📲 SHARE</button>
@@ -813,6 +811,7 @@ showMsg('❌ حدث خطأ أثناء مسح المفاتيح', 'var(--danger-re
 }
 }
 
+// 🛡️ [تحديث توليد المفاتيح لتخزين المدة durationMs ليتم احتسابها عند أول استخدام]
 async function generateKeys() {
 let durationMs = Number(document.getElementById('keyDurationSelect').value);
 let selectElement = document.getElementById('keyDurationSelect');
@@ -843,7 +842,6 @@ body: JSON.stringify(newBal)
 });
 
 const now = Date.now();
-const calculatedExpiry = Number(now + durationMs);
 
 let generatedKeysList = [];
 for (let i = 0; i < qty; i++) {
@@ -856,11 +854,14 @@ for (let j = 0; j < 4; j++) p3 += chars.charAt(Math.floor(Math.random() * chars.
 const newKey = `LUXEN_${p1}_${p2}_${p3}`;
 generatedKeysList.push(newKey);
 
+// تخزين مدة المفتاح بالملي ثانية وعدم احتساب الانتهاء إلا عند أول تسجيل دخول للمستخدم
 const keyPayload = {
 active: true,
 duration: durationText,
+durationMs: durationMs,
 devicesAllowed: devicesAllowed,
-expiry: calculatedExpiry,
+activatedAt: 0, // 0 يعني أنه لم يُستخدم بعد ولن يبدأ عد الوقت إلا عند الاستخدام الأول
+expiry: 0,
 created: now,
 reseller: activeReseller
 };
@@ -875,7 +876,7 @@ method: 'PUT',
 body: JSON.stringify({
 durationText: durationText,
 devicesAllowed: devicesAllowed,
-expiry: calculatedExpiry
+durationMs: durationMs
 })
 });
 }
@@ -901,7 +902,6 @@ showMsg('❌ Error generating keys!', 'var(--danger-red)');
 }
 }
 
-// 🛡️ [دالة معالجة عرض الموزعين في الأدمن بشكل سليم 100%]
 async function loadAdminDashboard() {
 try {
 const token = await getAuthToken();
@@ -936,12 +936,10 @@ let resellerObj = resesData[code];
 let bal = 0;
 let keysCount = 0;
 
-// إذا كانت بيانات الموزع مجلداً كاملاً
 if (typeof resellerObj === 'object' && resellerObj !== null) {
 bal = parseFloat(resellerObj.balance || 0);
 keysCount = (resellerObj.my_keys && typeof resellerObj.my_keys === 'object') ? Object.keys(resellerObj.my_keys).length : 0;
 } else if (typeof resellerObj === 'number' || typeof resellerObj === 'string') {
-// إذا كانت قيمة الموزع رقماً مجرداً أو نصاً
 bal = parseFloat(resellerObj || 0);
 }
 
@@ -977,7 +975,6 @@ showMsg('❌ Error updating price', 'var(--danger-red)');
 }
 }
 
-// ➕ إضافة موزع جديد بهيكل أمني سليم وبدون مسافات
 async function addNewReseller() {
 let rawCode = document.getElementById('addResellerCode').value.trim();
 let code = rawCode.replace(/\s+/g, '_');
