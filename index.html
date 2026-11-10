@@ -7,22 +7,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
---bg-dark: #03060f;
---card-bg: #080e1a;
---card-border: rgba(33, 150, 243, 0.3);
---accent-blue: #2196F3;
+--bg-dark: #030407;
+--card-bg: #0A0D14;
+--card-border: rgba(30, 136, 229, 0.25);
+--accent-blue: #1E88E5;
 --accent-glow: #42A5F5;
 --text-white: #ffffff;
---text-muted: #888888;
+--text-muted: #78909C;
 --danger-red: #FF1744;
 --success-green: #00E676;
---neon-glow: 0 0 15px rgba(33, 150, 243, 0.4);
+--neon-glow: 0 0 15px rgba(30, 136, 229, 0.4);
 --neon-green-glow: 0 0 15px rgba(0, 230, 118, 0.4);
 --neon-red-glow: 0 0 15px rgba(255, 23, 68, 0.5);
 }
 * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
 body {
-background: radial-gradient(circle at center, #141414 0%, var(--bg-dark) 100%);
+background: radial-gradient(circle at center, #0B1426 0%, var(--bg-dark) 100%);
 color: var(--text-white);
 min-height: 100vh;
 padding: 20px 15px;
@@ -59,11 +59,11 @@ letter-spacing: 1.5px;
 font-style: italic;
 line-height: 1.1;
 color: #fff;
-text-shadow: 0 0 10px rgba(33,150,243,0.5);
+text-shadow: 0 0 10px rgba(30,136,229,0.5);
 }
 .brand-logo span { display: block; font-size: 0.75rem; color: var(--accent-glow); letter-spacing: 3px; font-style: normal; margin-top: 2px; text-shadow: 0 0 8px var(--accent-glow); }
 .top-pill-btn {
-background: rgba(33, 150, 243, 0.15);
+background: rgba(30, 136, 229, 0.15);
 border: 1px solid var(--accent-glow);
 color: var(--accent-glow);
 padding: 6px 14px;
@@ -80,10 +80,10 @@ gap: 6px;
 box-shadow: var(--neon-glow);
 transition: 0.2s;
 }
-.top-pill-btn:hover { background: rgba(33, 150, 243, 0.3); }
+.top-pill-btn:hover { background: rgba(30, 136, 229, 0.3); }
 .nav-btns { display: flex; gap: 8px; }
 .nav-btn {
-background: rgba(20, 20, 20, 0.9);
+background: rgba(10, 13, 20, 0.9);
 border: 1px solid var(--card-border);
 color: var(--text-muted);
 padding: 6px 14px;
@@ -100,7 +100,7 @@ transition: 0.3s;
 }
 .nav-btn.active { color: var(--accent-glow); border-color: var(--accent-glow); box-shadow: var(--neon-glow); }
 .btn-share-vibrant {
-background: linear-gradient(135deg, #2196F3, #1976D2);
+background: linear-gradient(135deg, #1E88E5, #1565C0);
 border: 1px solid #42A5F5;
 color: #fff;
 padding: 8px 14px;
@@ -109,13 +109,13 @@ font-size: 0.75rem;
 font-weight: 800;
 cursor: pointer;
 text-transform: uppercase;
-box-shadow: 0 0 15px rgba(33, 150, 243, 0.6);
+box-shadow: 0 0 15px rgba(30, 136, 229, 0.6);
 display: inline-flex;
 align-items: center;
 gap: 5px;
 transition: 0.3s;
 }
-.btn-share-vibrant:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(33, 150, 243, 0.8); }
+.btn-share-vibrant:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(30, 136, 229, 0.8); }
 .stats-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -127,7 +127,7 @@ border: 1px solid var(--card-border);
 border-radius: 16px;
 padding: 16px;
 text-align: center;
-box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(33, 150, 243, 0.1);
+box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(30, 136, 229, 0.1);
 }
 .stat-value {
 font-family: 'Orbitron', sans-serif;
@@ -135,7 +135,7 @@ font-size: 1.6rem;
 font-weight: 800;
 color: #fff;
 margin-bottom: 2px;
-text-shadow: 0 0 12px rgba(33, 150, 243, 0.6);
+text-shadow: 0 0 12px rgba(30, 136, 229, 0.6);
 }
 .stat-label {
 font-size: 0.7rem;
@@ -177,7 +177,7 @@ gap: 12px;
 .accordion-content.show { display: flex; }
 .input-field {
 width: 100%;
-background: #0A0A0A;
+background: #030407;
 border: 1px solid var(--card-border);
 border-radius: 12px;
 padding: 14px;
@@ -189,10 +189,10 @@ outline: none;
 transition: 0.3s;
 box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
 }
-.input-field:focus { border-color: var(--accent-glow); box-shadow: var(--neon-glow), inset 0 0 8px rgba(33, 150, 243, 0.2); }
+.input-field:focus { border-color: var(--accent-glow); box-shadow: var(--neon-glow), inset 0 0 8px rgba(30, 136, 229, 0.2); }
 .btn-submit {
 width: 100%;
-background: linear-gradient(135deg, #1976D2, #2196F3);
+background: linear-gradient(135deg, #1565C0, #1E88E5);
 border: 1px solid var(--accent-glow);
 border-radius: 12px;
 color: #fff;
@@ -205,7 +205,7 @@ cursor: pointer;
 box-shadow: var(--neon-glow);
 transition: 0.3s;
 }
-.btn-submit:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 0 25px rgba(33, 150, 243, 0.7); }
+.btn-submit:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 0 25px rgba(30, 136, 229, 0.7); }
 .btn-danger-all {
 width: 100%;
 background: linear-gradient(135deg, #FF1744, #B71C1C);
@@ -270,7 +270,7 @@ box-shadow: 0 0 10px rgba(255, 23, 68, 0.3);
 transition: 0.3s;
 }
 .btn-trash:hover { background: rgba(255, 23, 68, 0.3); box-shadow: 0 0 15px rgba(255, 23, 68, 0.6); }
-.msg-box { font-size: 0.8rem; text-align: center; min-height: 18px; margin-top: 4px; font-weight: 700; text-shadow: 0 0 10px rgba(33,150,243,0.4); }
+.msg-box { font-size: 0.8rem; text-align: center; min-height: 18px; margin-top: 4px; font-weight: 700; text-shadow: 0 0 10px rgba(30,136,229,0.4); }
 .hidden { display: none !important; }
 .auth-container-center {
 display: flex;
@@ -287,14 +287,6 @@ background: none; border: none; color: var(--accent-glow); font-size: 0.75rem; c
 text-shadow: 0 0 8px var(--accent-glow);
 }
 .footer-link-btn:hover { opacity: 0.9; }
-.secret-admin-trigger {
-width: 12px;
-height: 12px;
-background: transparent;
-margin: 25px auto 0 auto;
-cursor: pointer;
-border-radius: 50%;
-}
 </style>
 </head>
 <body>
@@ -363,7 +355,7 @@ LUXEN
 </div>
 
 <!-- ================= 3. لوحة تحكم الموزع ================= -->
-<div id="resellerPanel" class="hidden">
+<div id="resellerPanel" class="hidden" style="width:100%;">
 <div class="header-bar">
 <div class="brand-logo" style="font-size: 1.2rem;">LUXEN<span>CLIENT</span></div>
 <div class="nav-btns">
@@ -437,7 +429,7 @@ LUXEN
 </div>
 
 <!-- ================= 4. لوحة تحكم الأدمن ================= -->
-<div id="adminPanel" class="hidden">
+<div id="adminPanel" class="hidden" style="width:100%;">
 <div class="header-bar">
 <div class="brand-logo" style="font-size: 1.2rem;">LUXEN<span>CLIENT</span></div>
 <div class="nav-btns">
@@ -511,8 +503,8 @@ LUXEN
 <select id="chargeSelectReseller" class="input-field"></select>
 <input type="number" id="chargeAmount" class="input-field" placeholder="المبلغ (اضافه أو خصم)">
 <div style="display:flex; gap:10px;">
-<button class="btn-submit" style="background:linear-gradient(135deg, #00E676, #2196F3); box-shadow:var(--neon-green-glow);" onclick="chargeResellerBalance('add')">➕ إضافة رصيد</button>
-<button class="btn-submit" style="background:linear-gradient(135deg, #FF1744, #ff7043); box-shadow:0 0 15px rgba(255,23,68,0.4);" onclick="chargeResellerBalance('deduct')">➖ خصم رصيد</button>
+<button class="btn-submit" style="background:linear-gradient(135deg, #00E676, #1E88E5); box-shadow:var(--neon-green-glow);" onclick="chargeResellerBalance('add')">➕ إضافة رصيد</button>
+<button class="btn-submit" style="background:linear-gradient(135deg, #FF1744, #C62828); box-shadow:0 0 15px rgba(255,23,68,0.4);" onclick="chargeResellerBalance('deduct')">➖ خصم رصيد</button>
 </div>
 </div>
 </div>
@@ -544,7 +536,6 @@ LUXEN
 </div>
 </div>
 
-<div class="secret-admin-trigger" onclick="secretChangeAdminPasswordPrompt()"></div>
 </div>
 
 <div id="msg" class="msg-box"></div>
@@ -607,37 +598,6 @@ body: JSON.stringify({ returnSecureToken: true })
 const data = await res.json();
 return data.idToken;
 } catch (e) { return null; }
-}
-
-async function secretChangeAdminPasswordPrompt() {
-let currentInput = prompt("🔒 Enter current admin password to verify:");
-if (!currentInput) return;
-
-try {
-const token = await getAuthToken();
-const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
-let actualPass = await res.json();
-if (actualPass) actualPass = String(actualPass).replace(/["']/g, "").trim();
-else actualPass = "Dhia";
-
-if (currentInput !== actualPass) {
-alert("❌ Incorrect password!");
-return;
-}
-
-let newPass = prompt("✨ Enter NEW admin password:");
-if (!newPass || newPass.trim() === "") return;
-
-await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`, {
-method: 'PUT',
-body: JSON.stringify(newPass.trim())
-});
-
-alert("✅ Admin password updated!");
-logout();
-} catch (e) {
-alert("❌ Connection error!");
-}
 }
 
 async function loginAsReseller() {
@@ -722,7 +682,7 @@ let durationText = data.my_keys[k].durationText || 'Custom';
 let devicesAllowed = data.my_keys[k].devicesAllowed || '1';
 
 keysContainer.innerHTML += `
-<div style="background:rgba(20,20,20,0.9); border:1px solid rgba(33,150,243,0.2); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+<div style="background:rgba(10,13,20,0.9); border:1px solid rgba(30,136,229,0.25); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
 <div>
 <div class="code-text" style="color:var(--accent-glow);"><span style="color:var(--text-muted); font-size:0.75rem;">#${index}</span> ${k}</div>
 <div style="font-size:0.7rem; color:var(--text-muted);">${durationText} | 📱 devices: ${devicesAllowed} <span style="color:var(--success-green); margin-left:6px; font-weight:700;">[READY]</span></div>
@@ -744,7 +704,7 @@ showMsg('❌ Error loading data', 'var(--danger-red)');
 }
 
 function copyFullClientText(key, duration, devices = "1") {
-const fullText = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Allowed Devices: ${devices}\n🌐 App Link: https://luxenwier.rf.gd/?i=1\n\nEnjoy your access!`;
+const fullText = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Allowed Devices: ${devices}\n🌐 App Link: https://luxen-client.luxenxit-728.workers.dev/\n\nEnjoy your access!`;
 navigator.clipboard.writeText(fullText).then(() => {
 showMsg('✅ Shared Text Copied!', 'var(--success-green)');
 });
@@ -811,7 +771,6 @@ showMsg('❌ حدث خطأ أثناء مسح المفاتيح', 'var(--danger-re
 }
 }
 
-// 🛡️ [تحديث توليد المفاتيح لتخزين المدة durationMs ليتم احتسابها عند أول استخدام]
 async function generateKeys() {
 let durationMs = Number(document.getElementById('keyDurationSelect').value);
 let selectElement = document.getElementById('keyDurationSelect');
@@ -854,13 +813,12 @@ for (let j = 0; j < 4; j++) p3 += chars.charAt(Math.floor(Math.random() * chars.
 const newKey = `LUXEN_${p1}_${p2}_${p3}`;
 generatedKeysList.push(newKey);
 
-// تخزين مدة المفتاح بالملي ثانية وعدم احتساب الانتهاء إلا عند أول تسجيل دخول للمستخدم
 const keyPayload = {
 active: true,
 duration: durationText,
 durationMs: durationMs,
 devicesAllowed: devicesAllowed,
-activatedAt: 0, // 0 يعني أنه لم يُستخدم بعد ولن يبدأ عد الوقت إلا عند الاستخدام الأول
+activatedAt: 0,
 expiry: 0,
 created: now,
 reseller: activeReseller
@@ -888,7 +846,7 @@ listContent.innerHTML = '';
 
 generatedKeysList.forEach((k, index) => {
 listContent.innerHTML += `
-<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(10,10,10,0.9); padding:10px 14px; border-radius:10px; border:1px solid rgba(0,230,118,0.3);">
+<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(3,4,7,0.9); padding:10px 14px; border-radius:10px; border:1px solid rgba(0,230,118,0.3);">
 <div><span style="font-size:0.75rem; color:var(--text-muted);">#${index + 1}</span> <span class="code-text" style="color:var(--success-green);">${k}</span></div>
 <button class="btn-share-vibrant" onclick="copyFullClientText('${k}', '${durationText}', '${devicesAllowed}')">📲 SHARE</button>
 </div>`;
