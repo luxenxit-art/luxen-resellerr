@@ -289,16 +289,33 @@ background: none; border: none; color: var(--accent-glow); font-size: 0.75rem; c
 text-shadow: 0 0 8px var(--accent-glow);
 }
 .footer-link-btn:hover { opacity: 0.9; }
+
+/* شاشة صيانة بوابة الموزعين */
+#maintResellerScreen {
+  position: fixed; inset: 0; background: radial-gradient(circle at center, #1a0f00 0%, var(--bg-dark) 100%);
+  z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 25px; text-align: center;
+}
 </style>
 </head>
 <body>
+
+<!-- شاشة صيانة بوابة الموزعين -->
+<div id="maintResellerScreen" class="hidden">
+  <div style="font-size: 5rem; margin-bottom: 20px;">🛡️</div>
+  <div style="font-family:'Orbitron',sans-serif; font-size:1.8rem; color:var(--warning); margin-bottom:12px;">RESELLER PORTAL MAINTENANCE</div>
+  <p style="color:var(--text-muted); font-size:0.9rem; max-width:340px; line-height:1.6; font-weight:700; margin-bottom:20px;">بوابة الموزعين متوقفة حالياً للصيانة والتحديث. تابعنا عبر القناة الرسمية!</p>
+  <div style="background:var(--card-bg); border:1px solid rgba(255,152,0,0.4); padding:14px 20px; border-radius:14px;">
+    <a href="https://t.me/HWAY_2" target="_blank" style="color:var(--accent-glow); text-decoration:none; font-weight:900; font-family:'Orbitron';">@HWAY_2 ➔ تواصل معنا</a>
+  </div>
+</div>
 
 <div class="dashboard-container" id="appRoot">
 <!-- ================= 1. شاشة تسجيل دخول الموزع ================= -->
 <div id="resellerLoginView" class="auth-container-center">
 <div class="brand-logo-container">
 <button class="top-pill-btn" onclick="showAdminLogin()">
-🛡 RESELLER ACCESS
+🛡 ADMIN ACCESS
 </button>
 <div class="brand-logo" style="text-align: left;">
 LUXEN
@@ -330,7 +347,7 @@ LUXEN
 <div id="adminLoginView" class="auth-container-center hidden">
 <div class="brand-logo-container">
 <button class="top-pill-btn" onclick="showResellerLogin()">
-🛡 ADMIN ACCESS
+◄ BACK
 </button>
 <div class="brand-logo" style="text-align: left;">
 LUXEN
@@ -558,11 +575,24 @@ LUXEN
 </div>
 
 <script>
-const WEB_API_KEY = 'AIzaSyAzQJuIPLwJsTJ1veR3f4trvfZoGhprduA';
-const FIREBASE_URL = 'https://luxen-pro-default-rtdb.firebaseio.com/';
+const WEB_API_KEY = 'AIzaSyDmZ_227JqCvlVDEEZLBDm4Zn4qaNDVAfg';
+const FIREBASE_URL = 'https://luxen-master-default-rtdb.firebaseio.com/';
 
 let activeReseller = null;
 let currentAdminPassSession = null;
+
+window.addEventListener('DOMContentLoaded', async () => {
+  // فحص حالة صيانة بوابة الموزعين من الفايربيز الجديد فوراً
+  try {
+    const token = await getAuthToken();
+    const res = await fetch(`${FIREBASE_URL}settings/maintenance.json?auth=${token}`);
+    const maintData = await res.json();
+    if (maintData && maintData.reseller === true) {
+      document.getElementById('maintResellerScreen').classList.remove('hidden');
+      document.getElementById('appRoot').classList.add('hidden');
+    }
+  } catch(e) {}
+});
 
 function showMsg(txt, color) {
 const msg = document.getElementById('msg');
@@ -846,7 +876,8 @@ devicesAllowed: devicesAllowed,
 activatedAt: 0,
 expiry: 0,
 created: now,
-reseller: activeReseller
+reseller: activeReseller,
+activeDevices: {}
 };
 
 await fetch(`${FIREBASE_URL}keys/${newKey}.json?auth=${token}`, {
@@ -905,7 +936,6 @@ document.getElementById('statKeys').innerText = (keysData && typeof keysData ===
 const resesRes = await fetch(`${FIREBASE_URL}resellers.json?auth=${token}`);
 const resesData = await resesRes.json();
 
-// جلب حالة الصيانة الحالية وتحديث الأزرار
 const maintRes = await fetch(`${FIREBASE_URL}settings/maintenance.json?auth=${token}`);
 const maintData = await maintRes.json() || { client: false, reseller: false };
 document.getElementById('maintClientBtn').innerText = maintData.client ? "🛠️ صيانة موقع العملاء: مفعلة ✅" : "🛠️ صيانة موقع العملاء: معطلة ❌";
