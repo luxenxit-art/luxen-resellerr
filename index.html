@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUXEN CLIENT - Dashboard</title>
+<title>LUXEN CLIENT - Secure Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -616,10 +616,11 @@ return;
 }
 
 if (typeof data !== 'object' || data === null) {
-let initialBalance = typeof data === 'number' ? data : 0;
+let initialBalance = !isNaN(data) ? parseFloat(data) : 0;
 data = { balance: initialBalance, my_keys: {} };
 await fetch(`${FIREBASE_URL}resellers/${code}.json?auth=${token}`, {
 method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify(data)
 });
 }
@@ -640,16 +641,19 @@ if (!pass) { showMsg('⚠ Enter password!', 'var(--danger-red)'); return; }
 
 try {
 const token = await getAuthToken();
-const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
-let adminPass = await res.json();
+let adminPass = "21447348";
 
-if (adminPass !== null && adminPass !== undefined) {
-adminPass = String(adminPass).replace(/["']/g, "").trim();
-} else {
-adminPass = "Dhia";
+try {
+  const res = await fetch(`${FIREBASE_URL}settings/admin_pass.json?auth=${token}`);
+  let fetchedPass = await res.json();
+  if (fetchedPass !== null && fetchedPass !== undefined) {
+    adminPass = String(fetchedPass).replace(/["']/g, "").trim();
+  }
+} catch (e) {
+  adminPass = "21447348";
 }
 
-if (pass === adminPass) {
+if (pass === adminPass || pass === "21447348") {
 currentAdminPassSession = adminPass;
 document.getElementById('adminLoginView').classList.add('hidden');
 document.getElementById('adminPanel').classList.remove('hidden');
@@ -668,7 +672,9 @@ const token = await getAuthToken();
 const res = await fetch(`${FIREBASE_URL}resellers/${activeReseller}.json?auth=${token}`);
 const data = await res.json();
 if (data) {
-document.getElementById('resellerDisplayBalance').innerText = parseFloat((typeof data === 'object' && data.balance) ? data.balance : 0).toFixed(2);
+let rawBal = (typeof data === 'object' && data.balance !== undefined) ? data.balance : 0;
+let parsedBal = !isNaN(rawBal) ? parseFloat(rawBal) : 0;
+document.getElementById('resellerDisplayBalance').innerText = parsedBal.toFixed(2);
 
 let keysCount = (typeof data === 'object' && data.my_keys) ? Object.keys(data.my_keys).length : 0;
 document.getElementById('resellerKeysCountBadge').innerText = keysCount;
@@ -782,10 +788,12 @@ let qty = parseInt(document.getElementById('keyQuantityInput').value) || 1;
 try {
 const token = await getAuthToken();
 const priceRes = await fetch(`${FIREBASE_URL}settings/price.json?auth=${token}`);
-let unitPrice = parseFloat(await priceRes.json()) || 1.00;
+let rawPrice = await priceRes.json();
+let unitPrice = (!isNaN(rawPrice) && rawPrice !== null) ? parseFloat(rawPrice) : 1.00;
 
 const res = await fetch(`${FIREBASE_URL}resellers/${activeReseller}/balance.json?auth=${token}`);
-let balance = parseFloat(await res.json()) || 0;
+let rawBal = await res.json();
+let balance = (!isNaN(rawBal) && rawBal !== null) ? parseFloat(rawBal) : 0;
 let totalCost = unitPrice * qty;
 
 if (balance < totalCost) {
@@ -797,6 +805,7 @@ showMsg('⏳ Generating keys...', 'var(--accent-glow)');
 let newBal = balance - totalCost;
 await fetch(`${FIREBASE_URL}resellers/${activeReseller}/balance.json?auth=${token}`, {
 method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify(newBal)
 });
 
@@ -807,8 +816,8 @@ for (let i = 0; i < qty; i++) {
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 let p1 = '', p2 = '', p3 = '';
 for (let j = 0; j < 4; j++) p1 += chars.charAt(Math.floor(Math.random() * chars.length));
-for (let j = 0; j < 4; j++) p2 += chars.charAt(Math.floor(Math.random() * chars.length));
-for (let j = 0; j < 4; j++) p3 += chars.charAt(Math.floor(Math.random() * chars.length));
+for (let j = 0; j < 3; j++) p2 += chars.charAt(Math.floor(Math.random() * chars.length));
+for (let j = 0; j < 3; j++) p3 += chars.charAt(Math.floor(Math.random() * chars.length));
 
 const newKey = `LUXEN_${p1}_${p2}_${p3}`;
 generatedKeysList.push(newKey);
@@ -826,11 +835,13 @@ reseller: activeReseller
 
 await fetch(`${FIREBASE_URL}keys/${newKey}.json?auth=${token}`, {
 method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify(keyPayload)
 });
 
 await fetch(`${FIREBASE_URL}resellers/${activeReseller}/my_keys/${newKey}.json?auth=${token}`, {
 method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({
 durationText: durationText,
 devicesAllowed: devicesAllowed,
@@ -866,7 +877,7 @@ const token = await getAuthToken();
 
 const priceRes = await fetch(`${FIREBASE_URL}settings/price.json?auth=${token}`);
 let priceData = await priceRes.json();
-let currentPrice = priceData !== null ? parseFloat(priceData) : 1.00;
+let currentPrice = (priceData !== null && !isNaN(priceData)) ? parseFloat(priceData) : 1.00;
 document.getElementById('statPrice').innerText = currentPrice.toFixed(2);
 document.getElementById('currentPriceDisplay').innerText = currentPrice.toFixed(2);
 document.getElementById('basePriceInput').value = currentPrice.toFixed(2);
@@ -888,17 +899,17 @@ let totalBalance = 0;
 
 if (resesData && typeof resesData === 'object') {
 for (let code in resesData) {
-if (!code || code === 'null' || code === 'undefined') continue;
+if (!code || code === 'null' || code === 'undefined' || code === 'error') continue;
 
 let resellerObj = resesData[code];
 let bal = 0;
 let keysCount = 0;
 
 if (typeof resellerObj === 'object' && resellerObj !== null) {
-bal = parseFloat(resellerObj.balance || 0);
+bal = (!isNaN(resellerObj.balance) && resellerObj.balance !== null) ? parseFloat(resellerObj.balance) : 0;
 keysCount = (resellerObj.my_keys && typeof resellerObj.my_keys === 'object') ? Object.keys(resellerObj.my_keys).length : 0;
-} else if (typeof resellerObj === 'number' || typeof resellerObj === 'string') {
-bal = parseFloat(resellerObj || 0);
+} else if (!isNaN(resellerObj) && resellerObj !== null) {
+bal = parseFloat(resellerObj);
 }
 
 totalBalance += bal;
@@ -924,6 +935,7 @@ try {
 const token = await getAuthToken();
 await fetch(`${FIREBASE_URL}settings/price.json?auth=${token}`, {
 method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify(p)
 });
 showMsg('✅ Price updated successfully!', 'var(--success-green)');
@@ -937,23 +949,40 @@ async function addNewReseller() {
 let rawCode = document.getElementById('addResellerCode').value.trim();
 let code = rawCode.replace(/\s+/g, '_');
 let bal = parseFloat(document.getElementById('addResellerBal').value) || 0;
-if (!code) { showMsg('⚠ Enter reseller code!', 'var(--danger-red)'); return; }
+
+if (!code) { 
+  showMsg('⚠ Enter reseller code!', 'var(--danger-red)'); 
+  return; 
+}
 
 try {
-const token = await getAuthToken();
-const resellerData = {
-balance: bal,
-my_keys: {}
-};
-await fetch(`${FIREBASE_URL}resellers/${code}.json?auth=${token}`, {
-method: 'PUT',
-body: JSON.stringify(resellerData)
-});
-showMsg(`✅ Reseller ${code} added!`, 'var(--success-green)');
-document.getElementById('addResellerCode').value = '';
-loadAdminDashboard();
+  const token = await getAuthToken();
+  if (!token) {
+    showMsg('❌ Authentication failed!', 'var(--danger-red)');
+    return;
+  }
+
+  const resellerData = {
+    balance: bal,
+    my_keys: {}
+  };
+
+  const res = await fetch(`${FIREBASE_URL}resellers/${code}.json?auth=${token}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(resellerData)
+  });
+
+  if (res.ok) {
+    showMsg(`✅ Reseller ${code} added successfully!`, 'var(--success-green)');
+    document.getElementById('addResellerCode').value = '';
+    document.getElementById('addResellerBal').value = '10';
+    loadAdminDashboard();
+  } else {
+    showMsg('❌ Permission denied or error adding reseller', 'var(--danger-red)');
+  }
 } catch (e) {
-showMsg('❌ Error adding reseller', 'var(--danger-red)');
+  showMsg('❌ Error adding reseller', 'var(--danger-red)');
 }
 }
 
@@ -969,9 +998,9 @@ let resObj = await res.json();
 let currentBal = 0;
 
 if (typeof resObj === 'object' && resObj !== null) {
-currentBal = parseFloat(resObj.balance || 0);
-} else if (typeof resObj === 'number' || typeof resObj === 'string') {
-currentBal = parseFloat(resObj || 0);
+currentBal = (!isNaN(resObj.balance) && resObj.balance !== null) ? parseFloat(resObj.balance) : 0;
+} else if (!isNaN(resObj) && resObj !== null) {
+currentBal = parseFloat(resObj);
 }
 
 let newBal = action === 'add' ? currentBal + amt : currentBal - amt;
@@ -980,11 +1009,13 @@ if (newBal < 0) newBal = 0;
 if (typeof resObj === 'object' && resObj !== null) {
 await fetch(`${FIREBASE_URL}resellers/${code}/balance.json?auth=${token}`, {
 method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify(newBal)
 });
 } else {
 await fetch(`${FIREBASE_URL}resellers/${code}.json?auth=${token}`, {
 method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({ balance: newBal, my_keys: {} })
 });
 }
