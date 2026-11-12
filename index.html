@@ -361,8 +361,9 @@ async function loadResellerPanelData() {
   } catch(e) { console.log(e); }
 }
 
+/* ✅ الرابط الجديد + سطر فارغ قبل Enjoy! */
 function copyFullClientText(key, duration, devices) {
-  const text = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Devices: ${devices}\n🌐 App: https://luxen-client.luxenxit-728.workers.dev/\n\nEnjoy!`;
+  const text = `🔥 LUXEN CLIENT 🔥\n\n🔑 Key: ${key}\n⏱ Duration: ${duration}\n📱 Devices: ${devices}\n🌐 App: https://luxenxit-client.luxenxit-728.workers.dev/\n\nEnjoy!`;
   navigator.clipboard.writeText(text).then(() => alert('✅ Copied!'));
 }
 
