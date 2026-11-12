@@ -595,25 +595,26 @@ async function addNewReseller() {
   if (!isAdminSession) { alert('❌ أنت لست أدمن! سجل خروج ودخل مرة ثانية.'); return; }
   
   let rawCode = document.getElementById('addResellerCode').value;
-  const code = sanitizeCode(rawCode);
+  // إصلاح الكود تلقائياً بصمت
+  const code = rawCode.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
   const bal = parseFloat(document.getElementById('addResellerBal').value) || 0;
 
-  if (!code) { alert('⚠ الكود مطلوب! (اكتبه بالإنجليزي والأرقام فقط بدون مسافات)'); return; }
-  if (rawCode !== code) { alert('⚠ تنبيه: تم تحويل الكود إلى: ' + code + ' (لأنه يحتوي على رموز أو حروف عربية)'); }
+  if (!code || code.length < 2) { 
+    alert('⚠ الكود مطلوب! (اكتب حروف إنجليزية أو أرقام فقط، بدون مسافات)'); 
+    return; 
+  }
 
   try {
-    alert('⏳ جاري التحقق من الكود: ' + code);
     const existing = await db.ref('resellers/' + code).get();
     if (existing.exists()) { alert('⚠ الكود مستخدم من قبل! جرب اسم ثاني.'); return; }
 
-    alert('⏳ جاري إضافة الموزع في قاعدة البيانات...');
     await db.ref('resellers/' + code).set({
       balance: bal,
       my_keys: {},
       createdAt: Date.now()
     });
     
-    alert('✅ ✅ ✅ تم إضافة الموزع بنجاح!');
+    alert('✅ ✅ ✅ تم إضافة الموزع بنجاح!\n\nالكود: ' + code + '\nالرصيد: ' + bal);
     document.getElementById('addResellerCode').value = '';
     document.getElementById('addResellerBal').value = '10';
     loadAdminDashboard();
@@ -678,4 +679,4 @@ async function deleteAllSystemKeys() {
 }
 </script>
 </body>
-  </html>
+</html>
