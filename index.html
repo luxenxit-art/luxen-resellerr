@@ -592,25 +592,35 @@ async function updateBasePrice() {
 }
 
 async function addNewReseller() {
-  if (!isAdminSession) return;
-  const code = sanitizeCode(document.getElementById('addResellerCode').value);
+  if (!isAdminSession) { alert('❌ أنت لست أدمن! سجل خروج ودخل مرة ثانية.'); return; }
+  
+  let rawCode = document.getElementById('addResellerCode').value;
+  const code = sanitizeCode(rawCode);
   const bal = parseFloat(document.getElementById('addResellerBal').value) || 0;
-  if (!code) { showMsg('⚠ الكود مطلوب', 'var(--danger-red)'); return; }
+
+  if (!code) { alert('⚠ الكود مطلوب! (اكتبه بالإنجليزي والأرقام فقط بدون مسافات)'); return; }
+  if (rawCode !== code) { alert('⚠ تنبيه: تم تحويل الكود إلى: ' + code + ' (لأنه يحتوي على رموز أو حروف عربية)'); }
 
   try {
+    alert('⏳ جاري التحقق من الكود: ' + code);
     const existing = await db.ref('resellers/' + code).get();
-    if (existing.exists()) { showMsg('⚠ الكود مستخدم', 'var(--danger-red)'); return; }
+    if (existing.exists()) { alert('⚠ الكود مستخدم من قبل! جرب اسم ثاني.'); return; }
 
+    alert('⏳ جاري إضافة الموزع في قاعدة البيانات...');
     await db.ref('resellers/' + code).set({
       balance: bal,
       my_keys: {},
       createdAt: Date.now()
     });
-    showMsg('✅ تم إضافة الموزع', 'var(--success-green)');
+    
+    alert('✅ ✅ ✅ تم إضافة الموزع بنجاح!');
     document.getElementById('addResellerCode').value = '';
     document.getElementById('addResellerBal').value = '10';
     loadAdminDashboard();
-  } catch(e) { showMsg('❌ ' + (e.message || 'خطأ'), 'var(--danger-red)'); }
+    
+  } catch(e) { 
+    alert('❌ خطأ من Firebase:\n\n' + e.message + '\n\nتأكد من قواعد الحماية (Rules) في Firebase.'); 
+  }
 }
 
 async function chargeResellerBalance(action) {
@@ -668,4 +678,4 @@ async function deleteAllSystemKeys() {
 }
 </script>
 </body>
-</html>
+  </html>
